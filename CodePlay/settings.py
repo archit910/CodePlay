@@ -19,7 +19,7 @@ def getKey():
         return Secret_Key()
     except:
         try:
-            key = os.envirn['Secret_Key']
+            key = os.envirn.get('Secret_Key')
             print (key)
             return key
         except:
