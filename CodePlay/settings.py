@@ -21,7 +21,7 @@ def getKey():
         return os.environ.get('Secret_Key')
 
 def getDebugState():
-    if(os.environ.get('Debug')==False):
+    if(str(os.environ.get('Debug'))==str(False)):
         return False
     return True
 
