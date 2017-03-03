@@ -18,12 +18,13 @@ def getKey():
         from .credentials import Secret_Key
         return Secret_Key()
     except:
-        try:
-            key = os.environ.get('Secret_Key')
-            print (key)
-            return key
-        except:
-            print ("key not found")
+        return os.environ.get('Secret_Key')
+
+def getDebugState():
+    if(os.environ.get('Debug')==False):
+        return False
+    return True
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,7 +37,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = getKey()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = getDebugState()
 
 ALLOWED_HOSTS = ['172.16.110.197','127.0.0.1','codeplayy.herokuapp.com']
 
