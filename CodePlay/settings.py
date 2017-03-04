@@ -43,7 +43,7 @@ ALLOWED_HOSTS = ['172.16.110.197','127.0.0.1','codeplayy.herokuapp.com']
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'djreact/static'), # We do this so that django's collectstatic copies or our bundles to the STATIC_ROOT or syncs them to whatever storage we use.
+    os.path.join(BASE_DIR, 'djreact/static'),
 )
 
 WEBPACK_LOADER = {
