@@ -9,7 +9,136 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   	<link rel="icon" href="http://i.kinja-img.com/gawker-media/image/upload/s--oubu15lK--/c_fit,fl_progressive,q_80,w_636/zt5u1lsrpk2szeacmzqm.gif" type="image/gif" sizes="16x16">
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
+    <script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js"></script>
+    <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.1.2/cytoscape-dagre.js"></script>
   	<title>CodePlay - Let You Play Your Code.</title>
+    <style>
+    .border {
+      border:1px solid;
+    }
+    body {
+  font-family: helvetica;
+  font-size: 14px;
+}
+
+#cy {
+  border: solid;
+  border-width: 1;
+  height: 100%;
+}
+
+h1 {
+  opacity: 0.5;
+  font-size: 1em;
+}
+    </style>
+    <script>
+      $(function() {
+
+  var win = $(window);
+
+  win.resize(function() {
+    resize();
+  });
+
+  function resize() {
+    console.log(win.height(), win.innerHeight());
+    $("#cy-container").height(win.innerHeight() - 130);
+    cy.resize();
+  }
+
+  setTimeout(resize, 0);
+
+  var cy = window.cy = cytoscape({
+    container: document.getElementById('cy'),
+
+    minZoom: 0.1,
+    maxZoom: 100,
+    wheelSensitivity: 0.1,
+
+    // panningEnabled: false,
+    //boxSelectionEnabled: true,
+    //autounselectify: false,
+    //selectionType: 'additive',
+    //autoungrabify: true,
+
+    layout: {
+            name: 'dagre'
+          },
+
+          style: [
+            {
+              selector: 'node',
+              style: {
+                'content': 'data(id)',
+                'text-opacity': 0.5,
+                'text-valign': 'center',
+                'text-halign': 'right',
+                'background-color': '#11479e'
+              }
+            },
+
+            {
+              selector: 'edge',
+              style: {
+                'width': 4,
+                'target-arrow-shape': 'triangle',
+                'line-color': '#9dbaea',
+                'target-arrow-color': '#9dbaea',
+                'curve-style': 'bezier'
+              }
+            }
+          ],
+
+          elements: {
+            nodes: [
+              { data: { id: 'n0' } },
+              { data: { id: 'n1' } },
+              { data: { id: 'n2' } },
+              { data: { id: 'n3' } },
+              { data: { id: 'n4' } },
+              { data: { id: 'n5' } },
+              { data: { id: 'n6' } },
+              { data: { id: 'n7' } },
+              { data: { id: 'n8' } },
+              { data: { id: 'n9' } },
+              { data: { id: 'n10' } },
+              { data: { id: 'n11' } },
+              { data: { id: 'n12' } },
+              { data: { id: 'n13' } },
+              { data: { id: 'n14' } },
+              { data: { id: 'n15' } },
+              { data: { id: 'n16' } }
+            ],
+            edges: [
+              { data: { source: 'n0', target: 'n1' } },
+              { data: { source: 'n1', target: 'n2' } },
+              { data: { source: 'n1', target: 'n3' } },
+              { data: { source: 'n4', target: 'n5' } },
+              { data: { source: 'n4', target: 'n6' } },
+              { data: { source: 'n6', target: 'n7' } },
+              { data: { source: 'n6', target: 'n8' } },
+              { data: { source: 'n8', target: 'n9' } },
+              { data: { source: 'n8', target: 'n10' } },
+              { data: { source: 'n11', target: 'n12' } },
+              { data: { source: 'n12', target: 'n13' } },
+              { data: { source: 'n13', target: 'n14' } },
+              { data: { source: 'n13', target: 'n15' } },
+              { data: { source: 'n0', target: 'n15' } },
+            ] // edges
+    } // elements
+  }); // cytoscape
+
+
+  // NOTE: Use selector(':selected') instead of event handler
+  
+
+  
+
+});
+    </script>
   </head>
   <body>
     {% block main %}{% endblock %}
