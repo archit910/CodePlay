@@ -3,19 +3,39 @@ import cytoscape from 'cytoscape';
 import cytoscapeDagre from 'cytoscape-dagre'
 
 import Headline from "../components/Headline"
+import ControlPanel from "./ControlPanel"
 
 cytoscapeDagre(cytoscape);
 
 export default class App1Container extends React.Component {
   constructor(props){
     super(props);
+    this.state = {
+      abc: 'true'
+    }
 
     this.renderCytoscapeElement = this.renderCytoscapeElement.bind(this);
+    this.onClickNextButton = this.onClickNextButton.bind(this);
+  }
+
+  onClickNextButton(){
+    console.log("dsfs");
+    this.setState({
+      abc:'false'
+    })
   }
 
   renderCytoscapeElement(){
 
         console.log('* Cytoscape.js is rendering the graph..');
+
+        var x = {
+                'content': 'data(id)',
+                'text-opacity': 0.5,
+                'text-valign': 'center',
+                'text-halign': 'right',
+                'background-color': '#11479e'
+              };
 
         this.cy = cytoscape(
         {
@@ -24,23 +44,23 @@ export default class App1Container extends React.Component {
             boxSelectionEnabled: false,
             autounselectify: true,
 
-            style: cytoscape.stylesheet()
-                .selector('node')
-                .css({
-                    'content': 'data(id)',
-                    'text-opacity': 0.5,
-                    'text-valign': 'center',
-                    'text-halign': 'right',
-                    'background-color': '#11479e'
-                })
-                .selector('edge')
-                .css({
-                    'width': 4,
-                    'target-arrow-shape': 'triangle',
-                    'line-color': '#9dbaea',
-                    'target-arrow-color': '#9dbaea',
-                    'curve-style': 'bezier'
-                })
+            style: [
+            {
+              selector: 'node',
+              style: x
+            },
+
+            {
+              selector: 'edge',
+              style: {
+                'width': 4,
+                'target-arrow-shape': 'triangle',
+                'line-color': '#9dbaea',
+                'target-arrow-color': '#9dbaea',
+                'curve-style': 'bezier'
+              }
+            }
+          ]
                 ,
             elements: {
                 nodes: [
@@ -91,6 +111,10 @@ export default class App1Container extends React.Component {
     componentDidMount(){
         this.renderCytoscapeElement();
     }
+    componentDidUpdate(){
+      console.log("asdas")
+      this.renderCytoscapeElement();
+    }
 
   render() {
     let cyStyle = {
@@ -102,24 +126,25 @@ export default class App1Container extends React.Component {
   let cyStyle1 = {
     height: '500px',
   };
+
     return (
       <div className="container">
         <div className="row">
           <div className="col-sm-12">
             <Headline>Sample App!</Headline>
             <div className="row">
-              <div className="col-sm-4 col-md-4 border">
-                <h4>Control Panel</h4>
+              <div className="col-sm-5 col-md-5 border" style={cyStyle1}>
+                <ControlPanel/>
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <h4>Visual</h4>
-                <button className="btn btn-primary"> - Previous </button>
+                <button className="btn btn-primary" onClick={this.onClickNextButton}> - Previous </button>
                 <button className="btn btn-primary"> Next - </button>
                 <div id="cy-container" >
                           <div style={cyStyle} id="cy1"></div>
                     </div>
               </div>
-              <div className="col-sm-4 col-md-4 border">
+              <div className="col-sm-3 col-md-3 border" style={cyStyle1}>
                 <h4>Code Panel</h4>
               </div>
             </div>
