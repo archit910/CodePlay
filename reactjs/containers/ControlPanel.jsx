@@ -1,4 +1,5 @@
 import React from "react";
+import Input from "./Input"
 
 export default class App1Container extends React.Component {
 	constructor(props){
@@ -58,7 +59,7 @@ export default class App1Container extends React.Component {
 					}
 					else
 					{
-						temporaryRow.push(<td><input type="text" style={{width:"40px",dispaly:"block"}} name="matrix[0][]" value=""/> </td>);
+						temporaryRow.push(<td><Input type="text" name="matrix[0][]" value=""/> </td>);
 					}
 				}
 			}
