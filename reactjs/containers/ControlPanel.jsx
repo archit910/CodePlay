@@ -58,7 +58,7 @@ export default class App1Container extends React.Component {
 					}
 					else
 					{
-						temporaryRow.push(<td><input type="text" style={{width:"70px",dispaly:"block"}} name="matrix[0][]" value=""/> </td>);
+						temporaryRow.push(<td><input type="text" style={{width:"40px",dispaly:"block"}} name="matrix[0][]" value=""/> </td>);
 					}
 				}
 			}
