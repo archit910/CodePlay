@@ -1,4 +1,6 @@
 import React from "react";
+import axios from 'axios';
+
 import cytoscape from 'cytoscape';
 import cytoscapeDagre from 'cytoscape-dagre'
 
@@ -11,15 +13,58 @@ export default class App1Container extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      abc: 'true'
+      abc: 'true',
+      matrix: [[0]],
+      nodes : 1,
+      algo : 'bfs',
+      step : 0,
+      description: 'Will be returned from database'
     }
 
+    //Functions bindings
     this.renderCytoscapeElement = this.renderCytoscapeElement.bind(this);
     this.onClickNextButton = this.onClickNextButton.bind(this);
+    this.updateAlgo = this.updateAlgo.bind(this);
+    this.updateNumberOfNodes = this.updateNumberOfNodes.bind(this);
+    this.updateMatrix = this.updateMatrix.bind(this);
+  }
+
+  updateAlgo(e){
+    this.setState({
+      algo:e,
+      step:0
+    })
+  }
+
+  updateNumberOfNodes(e){
+    this.setState({
+      nodes:e,
+      step : 0
+    })
+  }
+
+  updateMatrix(e){
+    this.setState({
+      matrix: e,
+      step : 0
+    })
   }
 
   onClickNextButton(){
     console.log("dsfs");
+    var qs = require('qs');
+    axios.post('/solve/',
+      qs.stringify({
+        id : 1234,
+        matrix : this.state.matrix,
+        algo : this.state.algo,
+        nodes : this.state.nodes,
+        step : this.state.step
+      })
+    )
+    .then(function (response){
+      console.log(response.data)
+    })
     this.setState({
       abc:'false'
     })
@@ -57,7 +102,8 @@ export default class App1Container extends React.Component {
                 'target-arrow-shape': 'triangle',
                 'line-color': '#9dbaea',
                 'target-arrow-color': '#9dbaea',
-                'curve-style': 'bezier'
+                'curve-style': 'bezier',
+                // 'opacity' : '0',
               }
             }
           ]
@@ -70,33 +116,28 @@ export default class App1Container extends React.Component {
               { data: { id: 'n3' } },
               { data: { id: 'n4' } },
               { data: { id: 'n5' } },
-              { data: { id: 'n6' } },
-              { data: { id: 'n7' } },
-              { data: { id: 'n8' } },
-              { data: { id: 'n9' } },
-              { data: { id: 'n10' } },
-              { data: { id: 'n11' } },
-              { data: { id: 'n12' } },
-              { data: { id: 'n13' } },
-              { data: { id: 'n14' } },
-              { data: { id: 'n15' } },
-              { data: { id: 'n16' } }
+              
+
+              
             ],
                 edges: [
               { data: { source: 'n0', target: 'n1' } },
-              { data: { source: 'n1', target: 'n2' } },
-              { data: { source: 'n1', target: 'n3' } },
+              { data: { source: 'n1', target: 'n5' } },
+              { data: { source: 'n0', target: 'n3' } },
+              { data: { source: 'n0', target: 'n4' } },
               { data: { source: 'n4', target: 'n5' } },
-              { data: { source: 'n4', target: 'n6' } },
-              { data: { source: 'n6', target: 'n7' } },
-              { data: { source: 'n6', target: 'n8' } },
-              { data: { source: 'n8', target: 'n9' } },
-              { data: { source: 'n8', target: 'n10' } },
-              { data: { source: 'n11', target: 'n12' } },
-              { data: { source: 'n12', target: 'n13' } },
-              { data: { source: 'n13', target: 'n14' } },
-              { data: { source: 'n13', target: 'n15' } },
-              { data: { source: 'n0', target: 'n15' } },
+              
+              { data: { source: 'n3', target: 'n4' } },
+              { data: { source: 'n4', target: 'n1' } },
+              { data: { source: 'n3', target: 'n1' } },
+              { data: { source: 'n0', target: 'n5' } },
+              
+              { data: { source: 'n3', target: 'n5' } },
+              
+              
+              
+              
+              
             ]
             },
 
@@ -128,13 +169,10 @@ export default class App1Container extends React.Component {
   };
 
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-12">
-            <Headline>Sample App!</Headline>
+          <div>
             <div className="row">
               <div className="col-sm-5 col-md-5 border" style={cyStyle1}>
-                <ControlPanel/>
+                <ControlPanel updateAlgo={this.updateAlgo} updateNumberOfNodes={this.updateNumberOfNodes} updateMatrix={this.updateMatrix}/>
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <h4>Visual</h4>
@@ -148,9 +186,8 @@ export default class App1Container extends React.Component {
                 <h4>Code Panel</h4>
               </div>
             </div>
+            <h4>Description of The Algorithm : {this.state.algo} {this.state.nodes} {this.state.description} {this.state.matrix}</h4>
           </div>
-        </div>
-      </div>
     )
   }
 }

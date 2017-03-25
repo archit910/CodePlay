@@ -6,17 +6,42 @@ export default class App1Container extends React.Component {
 		super(props);
 		this.state = {
 			nodes : 1,
-			algo : 'bfs'
+			algo : 'bfs',
+			matrix : [[0]]
 		}
 		this.onNumberOfNodesChange = this.onNumberOfNodesChange.bind(this);
 		this.onAlgoChange = this.onAlgoChange.bind(this);
+		this.handelMatrixFieldChange = this.handelMatrixFieldChange.bind(this);
+	}
+
+	handelMatrixFieldChange(i,j,e){
+		console.log(i,j,e.target.value);
+		var tempMatrix = this.state.matrix;
+		// console.log("=======",tempMatrix[i][j]);
+		tempMatrix[i][j] = e.target.value;
+		this.setState({
+			matrix: tempMatrix
+		})
+		this.props.updateMatrix(tempMatrix);
+
 	}
 
 	onNumberOfNodesChange(e){
 		// console.log(e.target.value);
+		var tempMatrix = [];
+		for (var i = 0; i < e.target.value ; i++) {
+			var row = [];
+			for (var j = 0; j < e.target.value; j++) {
+				row.push(0);
+			}
+			tempMatrix.push(row);
+		}
 		this.setState({
-			nodes : e.target.value
+			nodes : e.target.value,
+			matrix: tempMatrix
 		})
+		this.props.updateMatrix(tempMatrix);
+		this.props.updateNumberOfNodes(e.target.value);
 	}
 
 	onAlgoChange(e){
@@ -24,6 +49,7 @@ export default class App1Container extends React.Component {
 		this.setState({
 			algo : e.target.value
 		})
+		this.props.updateAlgo(e.target.value);
 	}
 
 	render() {
@@ -33,11 +59,11 @@ export default class App1Container extends React.Component {
 		}
 		//console.log(nodes);
 		var inputMatrixHtml = [];
-		for (var i = 0; i <= this.state.nodes ; i++) {
-			var temporaryRow = [];
+		for (let i = 0; i <= this.state.nodes ; i++) {
+			let temporaryRow = [];
 			// console.log("i = ",i);
 			if(i == 0){
-				for(var j = 0 ; j <= this.state.nodes ; j++) {
+				for(let j = 0 ; j <= this.state.nodes ; j++) {
 					// console.log("j = ",j);
 					if(j==0)
 					{
@@ -51,7 +77,7 @@ export default class App1Container extends React.Component {
 			}
 			else
 			{
-				for(var j = 0 ; j <= this.state.nodes ; j++) {
+				for(let j = 0 ; j <= this.state.nodes ; j++) {
 					// console.log("j = ",j);
 					if(j==0)
 					{
@@ -59,7 +85,7 @@ export default class App1Container extends React.Component {
 					}
 					else
 					{
-						temporaryRow.push(<td><Input type="text" name="matrix[0][]" value=""/> </td>);
+						temporaryRow.push(<td><input type="text" style={{width:"40px"}} onChange={(e)=>this.handelMatrixFieldChange(i-1,j-1,e)} value={this.state.matrix[i-1][j-1]}/> </td>);
 					}
 				}
 			}
