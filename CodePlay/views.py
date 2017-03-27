@@ -24,4 +24,14 @@ def solve(request):
 	print ("here is the output=======================")
 	print(parseMatrix(request))
 	returnResponse['error'] = False
+	style={
+	'content': 'data(id)',
+	'text-opacity': 0.2,
+	'text-valign': 'center',
+	'text-halign': 'right',
+	'background-color': '#11479e'
+	}
+	returnResponse['style'] = style
+	print(returnResponse)
+
 	return JsonResponse(returnResponse)

@@ -12,13 +12,23 @@ cytoscapeDagre(cytoscape);
 export default class App1Container extends React.Component {
   constructor(props){
     super(props);
+    var y = {
+                'content': 'data(id)',
+                'text-opacity': 0.9,
+                'text-valign': 'center',
+                'text-halign': 'right',
+                'background-color': '#11479e'
+              };
     this.state = {
       abc: 'true',
       matrix: [[0]],
       nodes : 1,
       algo : 'bfs',
       step : 0,
-      description: 'Will be returned from database'
+      description: 'Will be returned from database',
+      x : y,
+      start: 'n0',
+      end: 'n0'
     }
 
     //Functions bindings
@@ -37,9 +47,12 @@ export default class App1Container extends React.Component {
   }
 
   updateNumberOfNodes(e){
+    var node = ("n").concat(String(e));
+    // console.log(node,"===============")
     this.setState({
       nodes:e,
-      step : 0
+      step : 0,
+      end : node
     })
   }
 
@@ -64,7 +77,10 @@ export default class App1Container extends React.Component {
     )
     .then(function (response){
       console.log(response.data)
-    })
+      this.setState({
+        x: response.data.style
+      })
+    }.bind(this))
     this.setState({
       abc:'false'
     })
@@ -74,13 +90,7 @@ export default class App1Container extends React.Component {
 
         console.log('* Cytoscape.js is rendering the graph..');
 
-        var x = {
-                'content': 'data(id)',
-                'text-opacity': 0.5,
-                'text-valign': 'center',
-                'text-halign': 'right',
-                'background-color': '#11479e'
-              };
+        
 
         this.cy = cytoscape(
         {
@@ -92,20 +102,22 @@ export default class App1Container extends React.Component {
             style: [
             {
               selector: 'node',
-              style: x
+              style: this.state.x
             },
 
             {
-              selector: 'edge',
+              'selector': 'edge',
               style: {
-                'width': 4,
+                width: 3,
                 'target-arrow-shape': 'triangle',
                 'line-color': '#9dbaea',
                 'target-arrow-color': '#9dbaea',
                 'curve-style': 'bezier',
                 // 'opacity' : '0',
               }
-            }
+            },
+
+
           ]
                 ,
             elements: {
@@ -121,7 +133,7 @@ export default class App1Container extends React.Component {
               
             ],
                 edges: [
-              { data: { source: 'n0', target: 'n1' } },
+              
               { data: { source: 'n1', target: 'n5' } },
               { data: { source: 'n0', target: 'n3' } },
               { data: { source: 'n0', target: 'n4' } },
