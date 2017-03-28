@@ -7,6 +7,7 @@ import cytoscapeDagre from 'cytoscape-dagre'
 import Headline from "../components/Headline"
 import ControlPanel from "./ControlPanel"
 import DfsCode from "./DfsCode"
+import BfsCode from "./BfsCode"
 
 cytoscapeDagre(cytoscape);
 
@@ -152,6 +153,14 @@ export default class App1Container extends React.Component {
   if(this.state.algo=='dfs')
   {
      code = <DfsCode line={this.state.line}/>;
+  }
+  else if(this.state.algo=="bfs")
+  {
+    code = <BfsCode line={this.state.line}/>;
+  }
+  else
+  {
+    code = <div>Wrong Option</div>;
   }
 
     return (
