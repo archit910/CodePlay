@@ -125,14 +125,21 @@ def solve(request):
 	returnResponse = OrderedDict()
 	# print(request.POST.get('matrix[0][0]'))
 	# print ("here is the output=======================")
+	global visited
+	visited = []
+	global snapArray
+	snapArray = []
 	grid = parseMatrix(request)
 	global nodes
 	nodes = int(request.POST.get('nodes'))
+	print(nodes,"=========")
 	start = int(request.POST.get('start'))
 	dfs(grid,start)
 	returnResponse['error'] = False
 	returnResponse['data'] = snapArray
 	print(len(snapArray))
+	print(snapArray[0])
+	print("\n\n\n\n")
 	print(snapArray[1])
 	# style={
 	# 'content': 'data(id)',

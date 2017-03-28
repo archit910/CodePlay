@@ -70,9 +70,9 @@ export default class App1Container extends React.Component {
   onClickPrevButton(){
     console.log("dsfs");
     var qs = require('qs');
+    console.log(this.state.nodes,"==============")
     axios.post('/solve/',
       qs.stringify({
-        id : 1234,
         matrix : this.state.matrix,
         algo : this.state.algo,
         nodes : this.state.nodes,
