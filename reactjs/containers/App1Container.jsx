@@ -33,7 +33,8 @@ export default class App1Container extends React.Component {
       data: '',
       style: '',
       elements:'',
-      line : -1
+      line : -1,
+      loading: 'none'
     }
 
     //Functions bindings
@@ -49,9 +50,11 @@ export default class App1Container extends React.Component {
 
 
   onClickSubmitButton(){
+    this.setState({
+      loading: ''
+    })
     console.log("dsfs");
     var qs = require('qs');
-    console.log(this.state.nodes,"==============")
     axios.post('/solve/',
       qs.stringify({
         matrix : this.state.matrix,
@@ -62,12 +65,25 @@ export default class App1Container extends React.Component {
       })
     )
     .then(function (response){
-      console.log(response.data)
       this.setState({
         data: response.data.data,
-        step: 0
+        step: 0,
+        loading: 'none',
       })
     }.bind(this))
+    // for(var i= 0; i<i+1;i++)
+    // {
+    //   if(this.state.data!='' && this.state.step==0)
+    //   {
+    //     this.setState({
+    //   loading: 'none'
+    // })
+    //   }
+    // }
+    // this.setState({
+    //   loading: 'none'
+    // })
+
   }
 
   onClickResetButton(){
@@ -83,7 +99,8 @@ export default class App1Container extends React.Component {
       data: '',
       style: '',
       elements:'',
-      line : -1
+      line : -1,
+      loading: 'none'
     })
   }
 
@@ -204,10 +221,14 @@ export default class App1Container extends React.Component {
                               onClickResetButton={this.onClickResetButton}
                               nodes={this.state.nodes}
                               algo={this.state.algo}
-                              matrix={this.state.matrix}/>
+                              matrix={this.state.matrix}
+                              loading={this.state.loading}/>
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <h4>Visual</h4>
+               
+                 <span style={{'display':this.state.loading}}>Loading...</span>
+                 <br></br>
                 <button className="btn btn-primary" onClick={this.onClickPrevButton}> - Previous </button>
                 <button className="btn btn-primary" onClick={this.onClickNextButton}> Next - </button>
                 <div id="cy-container" >
