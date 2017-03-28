@@ -5,14 +5,34 @@ export default class App1Container extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			nodes : 1,
-			algo : 'bfs',
-			matrix : [[0]]
+			nodes : this.props.nodes,
+			algo : this.props.algo,
+			matrix : this.props.matrix
 		}
 		this.onNumberOfNodesChange = this.onNumberOfNodesChange.bind(this);
 		this.onAlgoChange = this.onAlgoChange.bind(this);
 		this.handelMatrixFieldChange = this.handelMatrixFieldChange.bind(this);
+		this.onClickSubmitButton = this.onClickSubmitButton.bind(this);
+		this.onClickResetButton = this.onClickResetButton.bind(this);
 	}
+
+	componentWillReceiveProps(nextProps){
+		console.log("next props",nextProps.nodes,nextProps.algo,nextProps.matrix)
+		this.setState({
+			nodes: nextProps.nodes,
+			algo: nextProps.algo,
+			matrix: nextProps.matrix
+		})
+	}
+
+	onClickSubmitButton(){
+		// console.log("dsfddsfdfdgffd")
+		this.props.onClickSubmitButton();
+	}
+
+	onClickResetButton(){
+		this.props.onClickResetButton();
+  	}
 
 	handelMatrixFieldChange(i,j,e){
 		console.log(i,j,e.target.value);
@@ -115,9 +135,10 @@ export default class App1Container extends React.Component {
 					        {nodesHtml}
 
 				      	</select>
-				      	<button className="btn btn-primary">Submit</button>
-				      	<button className="btn btn-warning">Reset</button>
 					</form>
+
+					<button className="btn btn-primary" onClick={this.onClickSubmitButton}>Submit</button>
+				      	<button className="btn btn-warning" onClick={this.onClickResetButton}>Reset</button>
 
 				<table>
 					<tbody>
