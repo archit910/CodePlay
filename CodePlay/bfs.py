@@ -90,6 +90,7 @@ def snapshot(nodes,*arguments):
     returnData = OrderedDict()
     returnData['style']=list(snapArrayDefault['style'])
     returnData['elements'] = elementCreator(nodes,arguments[0])
+    returnData['line'] = arguments[1]
     for i in visited:
         returnData['style'].append(styleCreator(nodes,createSelector(nodes,"node",i+1),visitedColour))
     for i in range(nodes):
@@ -97,8 +98,8 @@ def snapshot(nodes,*arguments):
             if(i in visited and j in visited):
                 returnData['style'].append(styleCreator(nodes,createSelector(nodes,"edge",i+1,j+1),visitedColour))
     try:
-        if(arguments[1]):
-            returnData['style'].append(styleCreator(nodes,createSelector(nodes,"node",arguments[1]+1),currentColour))
+        if(arguments[2]):
+            returnData['style'].append(styleCreator(nodes,createSelector(nodes,"node",arguments[2]+1),currentColour))
     except :
         pass
 
@@ -109,29 +110,23 @@ def BreadthFirstSearch(request,Start):
     visited = []
     global snapArray
     snapArray = []
-    returnResponse = OrderedDict()
-    print("request is coming here!!")
     Matrix = parseMatrix(request)
     nodes = len(Matrix[0])
-    snapArray.append(snapshot(nodes,Matrix,Start))
-    #print(Matrix)
-    #nodes = int(request.POST.get('nodes'))
-    
-    print (nodes,"=============")
-    #print(nodes)
-    visited = [False]*nodes 
+    visited = [False]*nodes
+    returnResponse = OrderedDict()    
+    snapArray.append(snapshot(nodes,Matrix,0))
     visited.append(Start)
-    snapArray.append(snapshot(nodes,Matrix))
+    snapArray.append(snapshot(nodes,Matrix,1))
     Queue.append(Start)
-    print("BFS starts now")
     while(Queue):
         FrontElement = Queue.pop(0)
-        print(FrontElement)
         for i in range(0,nodes):
             if(Matrix[FrontElement][i] == 1):
+                snapArray.append(snapshot(nodes,Matrix,6,i))
                 if(i not in visited):
-                    snapArray.append(snapshot(nodes,Matrix,i))
+                    snapArray.append(snapshot(nodes,Matrix,7,i))
                     visited.append(i)
+                    snapArray.append(snapshot(nodes,Matrix,8))
                     Queue.append(i)
     returnResponse['error'] = False
     returnResponse['data'] = snapArray
