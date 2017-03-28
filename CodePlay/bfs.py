@@ -121,7 +121,7 @@ def BreadthFirstSearch(request,Start):
     while(Queue):
         FrontElement = Queue.pop(0)
         for i in range(0,nodes):
-            if(Matrix[FrontElement][i] == 1):
+            if(Matrix[FrontElement][i]):
                 snapArray.append(snapshot(nodes,Matrix,6,i))
                 if(i not in visited):
                     snapArray.append(snapshot(nodes,Matrix,7,i))

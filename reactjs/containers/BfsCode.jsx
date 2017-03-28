@@ -23,7 +23,7 @@ export default class BfsCode extends React.Component
 		content.push("    While(Queue):")
 		content.push("        FrontElement=Queue.pop(0)")
 		content.push("        for i in range(nodes):")
-		content.push("            if(Matrix[FrontElement][i]==1):")
+		content.push("            if(Matrix[FrontElement][i]):")
 		content.push("                if(i not in visited):")
 		content.push("                    visited.append(i)")
 		content.push("                    Queue.append(i)")
