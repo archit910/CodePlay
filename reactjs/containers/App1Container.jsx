@@ -28,11 +28,15 @@ export default class App1Container extends React.Component {
       description: 'Will be returned from database',
       x : y,
       start: 'n0',
-      end: 'n0'
+      end: 'n0',
+      data: '',
+      style: '',
+      elements:''
     }
 
     //Functions bindings
     this.renderCytoscapeElement = this.renderCytoscapeElement.bind(this);
+    this.onClickPrevButton = this.onClickPrevButton.bind(this);
     this.onClickNextButton = this.onClickNextButton.bind(this);
     this.updateAlgo = this.updateAlgo.bind(this);
     this.updateNumberOfNodes = this.updateNumberOfNodes.bind(this);
@@ -63,7 +67,7 @@ export default class App1Container extends React.Component {
     })
   }
 
-  onClickNextButton(){
+  onClickPrevButton(){
     console.log("dsfs");
     var qs = require('qs');
     axios.post('/solve/',
@@ -72,19 +76,30 @@ export default class App1Container extends React.Component {
         matrix : this.state.matrix,
         algo : this.state.algo,
         nodes : this.state.nodes,
-        step : this.state.step
+        step : this.state.step,
+        start: 0,
+        
       })
     )
     .then(function (response){
       console.log(response.data)
       this.setState({
-        x: response.data.style
+        data: response.data.data,
+        step: 0
       })
     }.bind(this))
+  }
+
+
+  onClickNextButton(){
+    var step = this.state.step;
     this.setState({
-      abc:'false'
+      step: step + 1,
+      style:this.state.data[step].style,
+      elements: this.state.data[step].elements
     })
   }
+
 
   renderCytoscapeElement(){
 
@@ -99,59 +114,9 @@ export default class App1Container extends React.Component {
             boxSelectionEnabled: false,
             autounselectify: true,
 
-            style: [
-            {
-              selector: 'node',
-              style: this.state.x
-            },
-
-            {
-              'selector': 'edge',
-              style: {
-                width: 3,
-                'target-arrow-shape': 'triangle',
-                'line-color': '#9dbaea',
-                'target-arrow-color': '#9dbaea',
-                'curve-style': 'bezier',
-                // 'opacity' : '0',
-              }
-            },
-
-
-          ]
+            'style': this.state.style
                 ,
-            elements: {
-                nodes: [
-              { data: { id: 'n0' } },
-              { data: { id: 'n1' } },
-              { data: { id: 'n2' } },
-              { data: { id: 'n3' } },
-              { data: { id: 'n4' } },
-              { data: { id: 'n5' } },
-              
-
-              
-            ],
-                edges: [
-              
-              { data: { source: 'n1', target: 'n5' } },
-              { data: { source: 'n0', target: 'n3' } },
-              { data: { source: 'n0', target: 'n4' } },
-              { data: { source: 'n4', target: 'n5' } },
-              
-              { data: { source: 'n3', target: 'n4' } },
-              { data: { source: 'n4', target: 'n1' } },
-              { data: { source: 'n3', target: 'n1' } },
-              { data: { source: 'n0', target: 'n5' } },
-              
-              { data: { source: 'n3', target: 'n5' } },
-              
-              
-              
-              
-              
-            ]
-            },
+            'elements': this.state.elements,
 
             layout: {
                 name: 'dagre',
@@ -188,8 +153,8 @@ export default class App1Container extends React.Component {
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <h4>Visual</h4>
-                <button className="btn btn-primary" onClick={this.onClickNextButton}> - Previous </button>
-                <button className="btn btn-primary"> Next - </button>
+                <button className="btn btn-primary" onClick={this.onClickPrevButton}> - Previous </button>
+                <button className="btn btn-primary" onClick={this.onClickNextButton}> Next - </button>
                 <div id="cy-container" >
                           <div style={cyStyle} id="cy1"></div>
                     </div>
