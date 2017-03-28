@@ -28,7 +28,6 @@ export default class App1Container extends React.Component {
       algo : 'bfs',
       step : 0,
       description: 'Will be returned from database',
-      x : y,
       start: 'n0',
       end: 'n0',
       data: '',
@@ -44,6 +43,48 @@ export default class App1Container extends React.Component {
     this.updateAlgo = this.updateAlgo.bind(this);
     this.updateNumberOfNodes = this.updateNumberOfNodes.bind(this);
     this.updateMatrix = this.updateMatrix.bind(this);
+    this.onClickSubmitButton = this.onClickSubmitButton.bind(this);
+    this.onClickResetButton = this.onClickResetButton.bind(this);
+  }
+
+
+  onClickSubmitButton(){
+    console.log("dsfs");
+    var qs = require('qs');
+    console.log(this.state.nodes,"==============")
+    axios.post('/solve/',
+      qs.stringify({
+        matrix : this.state.matrix,
+        algo : this.state.algo,
+        nodes : this.state.nodes,
+        start: 0,
+        
+      })
+    )
+    .then(function (response){
+      console.log(response.data)
+      this.setState({
+        data: response.data.data,
+        step: 0
+      })
+    }.bind(this))
+  }
+
+  onClickResetButton(){
+    this.setState({
+      abc: 'true',
+      matrix: [[0]],
+      nodes : 1,
+      algo : 'bfs',
+      step : 0,
+      description: 'Will be returned from database',
+      start: 'n0',
+      end: 'n0',
+      data: '',
+      style: '',
+      elements:'',
+      line : -1
+    })
   }
 
   updateAlgo(e){
@@ -71,26 +112,14 @@ export default class App1Container extends React.Component {
   }
 
   onClickPrevButton(){
-    console.log("dsfs");
-    var qs = require('qs');
-    console.log(this.state.nodes,"==============")
-    axios.post('/solve/',
-      qs.stringify({
-        matrix : this.state.matrix,
-        algo : this.state.algo,
-        nodes : this.state.nodes,
-        step : this.state.step,
-        start: 0,
-        
-      })
-    )
-    .then(function (response){
-      console.log(response.data)
-      this.setState({
-        data: response.data.data,
-        step: 0
-      })
-    }.bind(this))
+    var step = this.state.step;
+    var line = this.state.line;
+    this.setState({
+      step: step-1,
+      line: this.state.data[step-2].line,
+      style:this.state.data[step-2].style,
+      elements: this.state.data[step-2].elements
+    })
   }
 
 
@@ -165,10 +194,17 @@ export default class App1Container extends React.Component {
 
     return (
           <div>
-          <p style={{'textAlign':'center'}}>Only Dfs is Working Right Now </p>
+          <p style={{'textAlign':'center'}}>Only Dfs and Bfs is Working Right Now </p>
             <div className="row">
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
-                <ControlPanel updateAlgo={this.updateAlgo} updateNumberOfNodes={this.updateNumberOfNodes} updateMatrix={this.updateMatrix}/>
+                <ControlPanel updateAlgo={this.updateAlgo} 
+                              updateNumberOfNodes={this.updateNumberOfNodes} 
+                              updateMatrix={this.updateMatrix} 
+                              onClickSubmitButton={this.onClickSubmitButton} 
+                              onClickResetButton={this.onClickResetButton}
+                              nodes={this.state.nodes}
+                              algo={this.state.algo}
+                              matrix={this.state.matrix}/>
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <h4>Visual</h4>
