@@ -115,6 +115,8 @@ export default class App1Container extends React.Component {
 					        {nodesHtml}
 
 				      	</select>
+				      	<button className="btn btn-primary">Submit</button>
+				      	<button className="btn btn-warning">Reset</button>
 					</form>
 
 				<table>

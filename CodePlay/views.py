@@ -92,6 +92,7 @@ def snapshot(*arguments):
     returnData = OrderedDict()
     returnData['style']=list(snapArrayDefault['style'])
     returnData['elements'] = elementCreator(arguments[0])
+    returnData['line'] = arguments[1]
     for i in visited:
         returnData['style'].append(styleCreator(createSelector("node",i+1),visitedColour))
     for i in range(nodes):
@@ -99,25 +100,27 @@ def snapshot(*arguments):
             if(i in visited and j in visited):
                 returnData['style'].append(styleCreator(createSelector("edge",i+1,j+1),visitedColour))
     try:
-        if(arguments[1]):
-            returnData['style'].append(styleCreator(createSelector("node",arguments[1]+1),currentColour))
+        if(arguments[2]):
+            returnData['style'].append(styleCreator(createSelector("node",arguments[2]+1),currentColour))
     except :
         pass
 
     return returnData
 
 def dfs(grid,start):
-    snapArray.append(snapshot(grid,start))
+    snapArray.append(snapshot(grid,0,start))
+    snapArray.append(snapshot(grid,1,start))
     if(start not in visited):
         # print(start)
         visited.append(start)
-        snapArray.append(snapshot(grid))
+        snapArray.append(snapshot(grid,2))
         for i in range(0,nodes):
         	# print(start,i,nodes,"============")
         	if(grid[start][i]):
-        		snapArray.append(snapshot(grid,i))
+        		snapArray.append(snapshot(grid,4,i))
         		if(i not in visited):
-        			snapArray.append(snapshot(grid,i))
+        			snapArray.append(snapshot(grid,5,i))
+        			snapArray.append(snapshot(grid,6,i))
         			dfs(grid,i)
 
 @csrf_exempt
@@ -138,9 +141,11 @@ def solve(request):
 	returnResponse['error'] = False
 	returnResponse['data'] = snapArray
 	print(len(snapArray))
-	print(snapArray[0])
-	print("\n\n\n\n")
-	print(snapArray[1])
+	for i in range(len(snapArray)):
+		print(i)
+		print(snapArray[i])
+		print("\n\n\n\n")
+	# print(snapArray[1])
 	# style={
 	# 'content': 'data(id)',
 	# 'text-opacity': 0.2,

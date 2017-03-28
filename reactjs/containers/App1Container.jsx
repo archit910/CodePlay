@@ -6,6 +6,7 @@ import cytoscapeDagre from 'cytoscape-dagre'
 
 import Headline from "../components/Headline"
 import ControlPanel from "./ControlPanel"
+import DfsCode from "./DfsCode"
 
 cytoscapeDagre(cytoscape);
 
@@ -31,7 +32,8 @@ export default class App1Container extends React.Component {
       end: 'n0',
       data: '',
       style: '',
-      elements:''
+      elements:'',
+      line : -1
     }
 
     //Functions bindings
@@ -93,8 +95,10 @@ export default class App1Container extends React.Component {
 
   onClickNextButton(){
     var step = this.state.step;
+    var line = this.state.line;
     this.setState({
       step: step + 1,
+      line: this.state.data[step].line,
       style:this.state.data[step].style,
       elements: this.state.data[step].elements
     })
@@ -144,11 +148,17 @@ export default class App1Container extends React.Component {
   let cyStyle1 = {
     height: '500px',
   };
+  var code = <div>Hello I am nothing</div>;
+  if(this.state.algo=='dfs')
+  {
+     code = <DfsCode line={this.state.line}/>;
+  }
 
     return (
           <div>
+          <p style={{'textAlign':'center'}}>Only Dfs is Working Right Now </p>
             <div className="row">
-              <div className="col-sm-5 col-md-5 border" style={cyStyle1}>
+              <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <ControlPanel updateAlgo={this.updateAlgo} updateNumberOfNodes={this.updateNumberOfNodes} updateMatrix={this.updateMatrix}/>
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
@@ -159,8 +169,10 @@ export default class App1Container extends React.Component {
                           <div style={cyStyle} id="cy1"></div>
                     </div>
               </div>
-              <div className="col-sm-3 col-md-3 border" style={cyStyle1}>
+              <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <h4>Code Panel</h4>
+                <br/>
+                {code}
               </div>
             </div>
             <h4>Description of The Algorithm : {this.state.algo} {this.state.nodes} {this.state.description} {this.state.matrix}</h4>
