@@ -17,7 +17,7 @@ export default class BfsCode extends React.Component
 	componentWillMount()
 	{
 		var content = []
-		content.push("def BreadthFirstSearch(grid,start)")
+		content.push("def BreadthFirstSearch(Matrix,start)")
 		content.push("    visited.append(start)")
 		content.push("    Queue.append(start)")
 		content.push("    While(Queue):")
