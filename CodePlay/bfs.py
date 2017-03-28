@@ -1,11 +1,9 @@
-from django.shortcuts import render
 from django.http import JsonResponse
 from collections import OrderedDict
 
 from django.http import HttpResponseRedirect, HttpResponse
 import datetime
 from django.views.decorators.csrf import csrf_exempt
-from .bfs import BreadthFirstSearch
 def parseMatrix(request):
 	nodes = int(request.POST.get('nodes'))
 	matrix = []
@@ -19,8 +17,8 @@ def parseMatrix(request):
 	return matrix
 
 visited = []
-nodes = 7
-
+#nodes = 10
+Queue=[]
 #Colours
 visitedColour = "#FF0000"
 defaultColour = "#11479e"
@@ -50,7 +48,7 @@ snapArrayDefault['style'] = [
             }
         ]
 
-def styleCreator(selector, color):
+def styleCreator(nodes,selector, color):
     returnStyle = OrderedDict()
     returnStyle['selector'] = selector
     returnStyle['style'] = OrderedDict()
@@ -58,100 +56,88 @@ def styleCreator(selector, color):
     # print returnStyle
     return returnStyle
 
-def createSelector(type,*elements):
+def createSelector(nodes,type,*elements):
     if(type=="node"):
         return "#n"+str(elements[0])
     else:
         return "#e"+str(elements[0])+str(elements[1])
 
-def getNodes():
+def getNodes(nodes):
     nodesArray= []
     for i in range(0,nodes):
         nodesArray.append({'data':{'id':"n"+str(i+1)}})
     return nodesArray
 
-def getEdge(grid):
+def getEdge(nodes,grid):
 	edgeArray = []
 	for i in range(nodes):
 		for j in range(i+1,nodes):
+			#print(i,j,nodes)
 			if(grid[i][j]):
 				edgeArray.append({'data':{'id':"e"+str(i+1)+str(j+1),'source':'n'+str(i+1),'target':'n'+str(j+1)}})
 	return edgeArray
 
-def elementCreator(grid):
+def elementCreator(nodes,grid):
     elements = OrderedDict()
-    elements['nodes'] = getNodes()
-    elements['edges'] = getEdge(grid)
+    elements['nodes'] = getNodes(nodes)
+    elements['edges'] = getEdge(nodes,grid)
     return elements
 
 
 
 
-def snapshot(*arguments):
+def snapshot(nodes,*arguments):
     returnData = OrderedDict()
     returnData['style']=list(snapArrayDefault['style'])
-    returnData['elements'] = elementCreator(arguments[0])
-    returnData['line'] = arguments[1]
+    returnData['elements'] = elementCreator(nodes,arguments[0])
     for i in visited:
-        returnData['style'].append(styleCreator(createSelector("node",i+1),visitedColour))
+        returnData['style'].append(styleCreator(nodes,createSelector(nodes,"node",i+1),visitedColour))
     for i in range(nodes):
         for j in range(i+1,nodes):
             if(i in visited and j in visited):
-                returnData['style'].append(styleCreator(createSelector("edge",i+1,j+1),visitedColour))
+                returnData['style'].append(styleCreator(nodes,createSelector(nodes,"edge",i+1,j+1),visitedColour))
     try:
-        if(arguments[2]):
-            returnData['style'].append(styleCreator(createSelector("node",arguments[2]+1),currentColour))
+        if(arguments[1]):
+            returnData['style'].append(styleCreator(nodes,createSelector(nodes,"node",arguments[1]+1),currentColour))
     except :
         pass
 
     return returnData
 
-def dfs(grid,start):
-    snapArray.append(snapshot(grid,0,start))
-    snapArray.append(snapshot(grid,1,start))
-    if(start not in visited):
-        # print(start)
-        visited.append(start)
-        snapArray.append(snapshot(grid,2))
+def BreadthFirstSearch(request,Start):
+    global visited
+    visited = []
+    global snapArray
+    snapArray = []
+    returnResponse = OrderedDict()
+    print("request is coming here!!")
+    Matrix = parseMatrix(request)
+    nodes = len(Matrix[0])
+    snapArray.append(snapshot(nodes,Matrix,Start))
+    #print(Matrix)
+    #nodes = int(request.POST.get('nodes'))
+    
+    print (nodes,"=============")
+    #print(nodes)
+    visited = [False]*nodes 
+    visited.append(Start)
+    snapArray.append(snapshot(nodes,Matrix))
+    Queue.append(Start)
+    print("BFS starts now")
+    while(Queue):
+        FrontElement = Queue.pop(0)
+        print(FrontElement)
         for i in range(0,nodes):
-        	# print(start,i,nodes,"============")
-        	if(grid[start][i]):
-        		snapArray.append(snapshot(grid,4,i))
-        		if(i not in visited):
-        			snapArray.append(snapshot(grid,5,i))
-        			snapArray.append(snapshot(grid,6,i))
-        			dfs(grid,i)
+            if(Matrix[FrontElement][i] == 1):
+                if(i not in visited):
+                    snapArray.append(snapshot(nodes,Matrix,i))
+                    visited.append(i)
+                    Queue.append(i)
+    returnResponse['error'] = False
+    returnResponse['data'] = snapArray
+    print(len(snapArray))
+    print(snapArray[0])
+    print("\n\n\n\n")
+    print(snapArray[1])
 
-@csrf_exempt
-def solve(request):
-	returnResponse = OrderedDict()
-	# print(request.POST.get('matrix[0][0]'))
-	# print ("here is the output=======================")
-	global visited
-	visited = []
-	global snapArray
-	snapArray = []
-	grid = parseMatrix(request)
-	global nodes
-	nodes = int(request.POST.get('nodes'))
-	print(nodes,"=========")
-	start = int(request.POST.get('start'))
-	Algorithm = str(request.POST.get('algo'))
-	if(Algorithm == "bfs"):
-		return BreadthFirstSearch(request,start)
-	else:
-		dfs(grid,start)
-		returnResponse['error'] = False
-		returnResponse['data'] = snapArray
-		print(len(snapArray))
-	# style={
-	# 'content': 'data(id)',
-	# 'text-opacity': 0.2,
-	# 'text-valign': 'center',
-	# 'text-halign': 'right',
-	# 'background-color': '#11479e'
-	# }
-	# returnResponse['style'] = style
-	# print(returnResponse)
-
-	return JsonResponse(returnResponse)
+    return JsonResponse(returnResponse)
