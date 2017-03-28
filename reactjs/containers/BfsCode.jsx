@@ -64,11 +64,11 @@ export default class BfsCode extends React.Component
 		if(this.state.line==-1)
 		{
         console.log(this.state.content.length,"length is here")
-			codeHtml.push(<span style={{'border':'1px solid','background':'#8f939b','color':'white'}}>BreadthFirstSearch(grid,start)</span>)
+			codeHtml.push(<span style={{'border':'1px solid','background':'#8f939b','color':'white'}}>BreadthFirstSearch(Matrix,start)</span>)
 		}
 		else
 		{
-			codeHtml.push(<span>BreadthFirstSearch(grid,start)</span>)
+			codeHtml.push(<span>BreadthFirstSearch(Matrix,start)</span>)
 		}
 		return(<div>
 			<pre>
