@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from collections import OrderedDict
+import time
 
 from django.http import HttpResponseRedirect, HttpResponse
 import datetime
@@ -158,3 +159,16 @@ def solve(request):
 	# print(returnResponse)
 
 	return JsonResponse(returnResponse)
+
+def s(request):
+    for i in range(1,10000000):
+        print(i)
+    returnResponse = {}
+    returnResponse['error'] = False
+    return JsonResponse(returnResponse)
+
+
+def b(request):
+    returnResponse = {}
+    returnResponse['error'] = False
+    return JsonResponse(returnResponse)

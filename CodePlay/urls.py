@@ -23,4 +23,7 @@ urlpatterns = [
     url(r'^view2/', generic.TemplateView.as_view(template_name='view2.html')),
     url(r'^$', generic.TemplateView.as_view(template_name='mainview.html')),
     url(r'^solve/',solve),
+    url(r'^s/',s),
+    url(r'^b/',b),
+
 ]
