@@ -8,6 +8,7 @@ import Headline from "../components/Headline"
 import ControlPanel from "./ControlPanel"
 import DfsCode from "./DfsCode"
 import BfsCode from "./BfsCode"
+import StackQ from "./StackQ"
 
 cytoscapeDagre(cytoscape);
 
@@ -34,10 +35,10 @@ export default class App1Container extends React.Component {
       style: '',
       elements:'',
       line : -1,
-      loading: 'none'
+      loading: 'none',
+      arrType: 'Stack : ',
+      arr: [1,2,3,4,5]
     }
-
-    //Functions bindings
     this.renderCytoscapeElement = this.renderCytoscapeElement.bind(this);
     this.onClickPrevButton = this.onClickPrevButton.bind(this);
     this.onClickNextButton = this.onClickNextButton.bind(this);
@@ -83,6 +84,7 @@ export default class App1Container extends React.Component {
     // this.setState({
     //   loading: 'none'
     // })
+
 
   }
 
@@ -227,13 +229,16 @@ export default class App1Container extends React.Component {
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <h4>Visual</h4>
                
-                 <span style={{'display':this.state.loading}}>Loading...</span>
-                 <br></br>
+                <span style={{'display':this.state.loading}}>Loading...</span>
+                <br></br>
                 <button className="btn btn-primary" onClick={this.onClickPrevButton}> - Previous </button>
                 <button className="btn btn-primary" onClick={this.onClickNextButton}> Next - </button>
                 <div id="cy-container" >
-                          <div style={cyStyle} id="cy1"></div>
-                    </div>
+                  <div style={cyStyle} id="cy1"></div>
+                </div>
+                <div>
+                  <StackQ arrType={this.state.arrType} arr={this.state.arr}/>
+                </div>                
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <h4>Code Panel</h4>

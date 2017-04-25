@@ -128,7 +128,7 @@ export default class App1Container extends React.Component {
 						<select name="algo" onChange={this.onAlgoChange}>
 					        <option value='bfs'>Breadth-First-Search</option>
 					        <option value='dfs'>Depth-First-Search</option>
-					        <option value='dikjastra'>Dikjastra</option>
+					        <option value='dijkstra'>Dijkstra</option>
 					        <option value='belman'>BelmennFord</option>
 				      	</select>
 				      	<br/>
