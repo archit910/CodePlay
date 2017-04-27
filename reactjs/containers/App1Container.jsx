@@ -37,7 +37,7 @@ export default class App1Container extends React.Component {
       line : -1,
       loading: 'none',
       arrType: 'Stack : ',
-      arr: [1,2,3,4,5]
+      arr: ''
     }
     this.renderCytoscapeElement = this.renderCytoscapeElement.bind(this);
     this.onClickPrevButton = this.onClickPrevButton.bind(this);
@@ -70,6 +70,9 @@ export default class App1Container extends React.Component {
         data: response.data.data,
         step: 0,
         loading: 'none',
+        line: response.data.data[0].line,
+        style: response.data.data[0].style,
+        elements: response.data.data[0].elements
       })
     }.bind(this))
     // for(var i= 0; i<i+1;i++)
@@ -149,7 +152,8 @@ export default class App1Container extends React.Component {
       step: step + 1,
       line: this.state.data[step].line,
       style:this.state.data[step].style,
-      elements: this.state.data[step].elements
+      elements: this.state.data[step].elements,
+      arr : this.this.state.data[step].arr
     })
   }
 
@@ -210,7 +214,9 @@ export default class App1Container extends React.Component {
   {
     code = <div>Wrong Option</div>;
   }
-
+  var arrayCode = [];
+  
+    
     return (
           <div>
           <p style={{'textAlign':'center'}}>Only Dfs and Bfs is Working Right Now </p>
