@@ -146,7 +146,7 @@ def DijkstraAlgorithm(grid,StartPoint):
             if((distance[TopElement]+weight)<=distance[to]):
                 distance[to]=(distance[TopElement]+weight)
                 heappush(PriorityQueue,(to,distance[to]))
-    print(*distance)
+    # print(*distance)
     #returnResponse['error'] = False
     #returnResponse['data'] = snapArray
     #print(len(snapArray))
