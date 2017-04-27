@@ -37,7 +37,7 @@ export default class App1Container extends React.Component {
       elements:'',
       line : -1,
       loading: 'none',
-      arrType: 'Stack : ',
+      arrName: 'Stack : ',
       arr: ''
     }
     this.renderCytoscapeElement = this.renderCytoscapeElement.bind(this);
@@ -223,7 +223,7 @@ export default class App1Container extends React.Component {
 	var arrayCode = [];
 	for(let i=0; i<this.state.arr.length;i++)
 	{
-		arrayCode.push(<StackQ arrType={this.state.arr[i].type} arr={this.state.arr.content}/>)
+		arrayCode.push(<StackQ arrName={this.state.arr[i].name} arr={this.state.arr[i].content}/>)
 	}
 
     
@@ -253,7 +253,7 @@ export default class App1Container extends React.Component {
                   <div style={cyStyle} id="cy1"></div>
                 </div>
                 <div>
-                  <StackQ arrType={this.state.arrType} arr={this.state.arr}/>
+                  <StackQ arrName={this.state.arrName} arr={this.state.arr}/>
                   {arrayCode}
                 </div>                
               </div>
