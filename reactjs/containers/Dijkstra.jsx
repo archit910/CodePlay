@@ -15,7 +15,7 @@ export default class DijkstraAlgorithm extends React.Component
 	componentWillMount()
 	{
 		var content = []
-		content.push("from heapq import heappush,heappop")
+		content.push("from heapq import heappush,heappop")	
 		content.push("def DijkstraAlgorithm(grid,StartPoint)")
 		content.push("    PriorityQueue[(StartPoint,0)]")
 		content.push("    distance=[INFINITY]*(n)")
