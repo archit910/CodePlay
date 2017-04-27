@@ -141,7 +141,8 @@ export default class App1Container extends React.Component {
       step: step-1,
       line: this.state.data[step-2].line,
       style:this.state.data[step-2].style,
-      elements: this.state.data[step-2].elements
+      elements: this.state.data[step-2].elements,
+      arr : this.this.state.data[step-2].arr
     })
   }
 
@@ -193,34 +194,37 @@ export default class App1Container extends React.Component {
     }
 
   render() {
-    let cyStyle = {
-    height: '300px',
-    width: 'auto',
-    margin: '20px 0px',
-    border: '1px dashed'
-  };
-  let cyStyle1 = {
-    height: '500px',
-  };
-  var code = <div>Hello I am nothing</div>;
-  if(this.state.algo=='dfs')
-  {
-     code = <DfsCode line={this.state.line}/>;
-  }
-  else if(this.state.algo=="bfs")
-  {
-    code = <BfsCode line={this.state.line}/>;
-  }
-  else if(this.state.algo=="dikjastra")
-  {
-    code = <DijkstraAlgorithm line={this.state.line}/>;
-  }
-  else
-  {
-    code = <div>Wrong Option</div>;
-  }
-  var arrayCode = [];
-  
+	let cyStyle = {
+		height: '300px',
+		width: 'auto',
+		margin: '20px 0px',
+		border: '1px dashed'
+	};
+	let cyStyle1 = {
+		height: '500px',
+	};
+	var code = <div>Hello I am nothing</div>;
+	if(this.state.algo=='dfs')
+	{
+		code = <DfsCode line={this.state.line}/>;
+	}
+	else if(this.state.algo=="bfs")
+	{
+		code = <BfsCode line={this.state.line}/>;
+	}
+	else if(this.state.algo=="dikjastra")
+	{
+		code = <DijkstraAlgorithm line={this.state.line}/>;
+	}
+	else
+	{
+		code = <div>Wrong Option</div>;
+	}
+	var arrayCode = [];
+	for(let i=0; i<this.state.arr.length;i++)
+	{
+		arrayCode.push(<StackQ arrType={this.state.arr[i].type} arr={this.state.arr.content}/>)
+	}
     
     return (
           <div>
@@ -249,6 +253,7 @@ export default class App1Container extends React.Component {
                 </div>
                 <div>
                   <StackQ arrType={this.state.arrType} arr={this.state.arr}/>
+                  {arrayCode}
                 </div>                
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
