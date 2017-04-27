@@ -225,6 +225,7 @@ export default class App1Container extends React.Component {
 	{
 		arrayCode.push(<StackQ arrType={this.state.arr[i].type} arr={this.state.arr.content}/>)
 	}
+
     
     return (
           <div>
