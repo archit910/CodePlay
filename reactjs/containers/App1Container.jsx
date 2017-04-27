@@ -211,7 +211,7 @@ export default class App1Container extends React.Component {
   {
     code = <BfsCode line={this.state.line}/>;
   }
-  else if(this.state.algo=="dikjastra")
+  else if(this.state.algo=="dijkstra")
   {
     code = <DijkstraAlgorithm line={this.state.line}/>;
   }
