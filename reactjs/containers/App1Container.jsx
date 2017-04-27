@@ -8,6 +8,7 @@ import Headline from "../components/Headline"
 import ControlPanel from "./ControlPanel"
 import DfsCode from "./DfsCode"
 import BfsCode from "./BfsCode"
+import DijkstraAlgorithm from "./Dijkstra"
 import StackQ from "./StackQ"
 
 cytoscapeDagre(cytoscape);
@@ -209,6 +210,10 @@ export default class App1Container extends React.Component {
   else if(this.state.algo=="bfs")
   {
     code = <BfsCode line={this.state.line}/>;
+  }
+  else if(this.state.algo=="dikjastra")
+  {
+    code = <DijkstraAlgorithm line={this.state.line}/>;
   }
   else
   {

@@ -7,6 +7,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 from .bfs import BreadthFirstSearch
+from .dijkstra import DijkstraAlgorithm
+
 def parseMatrix(request):
 	nodes = int(request.POST.get('nodes'))
 	matrix = []
@@ -143,6 +145,8 @@ def solve(request):
 	Algorithm = str(request.POST.get('algo'))
 	if(Algorithm == "bfs"):
 		return BreadthFirstSearch(request,start)
+	elif(Algorithm=="dikjastra"):
+		return DijkstraAlgorithm(grid,start)
 	else:
 		dfs(grid,start)
 		returnResponse['error'] = False
