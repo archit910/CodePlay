@@ -7,7 +7,8 @@ export default class App1Container extends React.Component {
 		this.state = {
 			nodes : this.props.nodes,
 			algo : this.props.algo,
-			matrix : this.props.matrix
+			matrix : this.props.matrix,
+			loading : this.props.loading
 		}
 		this.onNumberOfNodesChange = this.onNumberOfNodesChange.bind(this);
 		this.onAlgoChange = this.onAlgoChange.bind(this);
@@ -21,7 +22,8 @@ export default class App1Container extends React.Component {
 		this.setState({
 			nodes: nextProps.nodes,
 			algo: nextProps.algo,
-			matrix: nextProps.matrix
+			matrix: nextProps.matrix,
+			loading : this.props.loading
 		})
 	}
 
@@ -126,7 +128,7 @@ export default class App1Container extends React.Component {
 						<select name="algo" onChange={this.onAlgoChange}>
 					        <option value='bfs'>Breadth-First-Search</option>
 					        <option value='dfs'>Depth-First-Search</option>
-					        <option value='dikjastra'>Dikjastra</option>
+					        <option value='dijkstra'>Dijkstra</option>
 					        <option value='belman'>BelmennFord</option>
 				      	</select>
 				      	<br/>
@@ -138,8 +140,8 @@ export default class App1Container extends React.Component {
 					</form>
 
 					<button className="btn btn-primary" onClick={this.onClickSubmitButton}>Submit</button>
-				      	<button className="btn btn-warning" onClick={this.onClickResetButton}>Reset</button>
-
+				    <button className="btn btn-warning" onClick={this.onClickResetButton}>Reset</button>
+				    
 				<table>
 					<tbody>
 	                	{inputMatrixHtml}

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from collections import OrderedDict
+import time
 
 from django.http import HttpResponseRedirect, HttpResponse
 import datetime
@@ -52,11 +53,14 @@ snapArrayDefault['style'] = [
             }
         ]
 
-def styleCreator(selector, color):
+def styleCreator(selector, color,type):
     returnStyle = OrderedDict()
     returnStyle['selector'] = selector
     returnStyle['style'] = OrderedDict()
-    returnStyle['style']['background-color'] = color
+    if (type=="node"):
+        returnStyle['style']['background-color'] = color
+    else:
+        returnStyle['style']['line-color'] = color
     # print returnStyle
     return returnStyle
 
@@ -95,14 +99,14 @@ def snapshot(*arguments):
     returnData['elements'] = elementCreator(arguments[0])
     returnData['line'] = arguments[1]
     for i in visited:
-        returnData['style'].append(styleCreator(createSelector("node",i+1),visitedColour))
+        returnData['style'].append(styleCreator(createSelector("node",i+1),visitedColour,"node"))
     for i in range(nodes):
         for j in range(i+1,nodes):
             if(i in visited and j in visited):
-                returnData['style'].append(styleCreator(createSelector("edge",i+1,j+1),visitedColour))
+                returnData['style'].append(styleCreator(createSelector("edge",i+1,j+1),visitedColour,"edge"))
     try:
         if(arguments[2]):
-            returnData['style'].append(styleCreator(createSelector("node",arguments[2]+1),currentColour))
+            returnData['style'].append(styleCreator(createSelector("node",arguments[2]+1),currentColour,"node"))
     except :
         pass
 
@@ -159,3 +163,16 @@ def solve(request):
 	# print(returnResponse)
 
 	return JsonResponse(returnResponse)
+
+def s(request):
+    for i in range(1,10000000):
+        print(i)
+    returnResponse = {}
+    returnResponse['error'] = False
+    return JsonResponse(returnResponse)
+
+
+def b(request):
+    returnResponse = {}
+    returnResponse['error'] = False
+    return JsonResponse(returnResponse)

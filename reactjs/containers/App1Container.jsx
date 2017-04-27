@@ -9,6 +9,8 @@ import ControlPanel from "./ControlPanel"
 import DfsCode from "./DfsCode"
 import BfsCode from "./BfsCode"
 import DijkstraAlgorithm from "./Dijkstra"
+import StackQ from "./StackQ"
+
 cytoscapeDagre(cytoscape);
 
 export default class App1Container extends React.Component {
@@ -33,10 +35,11 @@ export default class App1Container extends React.Component {
       data: '',
       style: '',
       elements:'',
-      line : -1
+      line : -1,
+      loading: 'none',
+      arrType: 'Stack : ',
+      arr: ''
     }
-
-    //Functions bindings
     this.renderCytoscapeElement = this.renderCytoscapeElement.bind(this);
     this.onClickPrevButton = this.onClickPrevButton.bind(this);
     this.onClickNextButton = this.onClickNextButton.bind(this);
@@ -49,9 +52,11 @@ export default class App1Container extends React.Component {
 
 
   onClickSubmitButton(){
+    this.setState({
+      loading: ''
+    })
     console.log("dsfs");
     var qs = require('qs');
-    console.log(this.state.nodes,"==============")
     axios.post('/solve/',
       qs.stringify({
         matrix : this.state.matrix,
@@ -62,12 +67,29 @@ export default class App1Container extends React.Component {
       })
     )
     .then(function (response){
-      console.log(response.data)
       this.setState({
         data: response.data.data,
-        step: 0
+        step: 0,
+        loading: 'none',
+        line: response.data.data[0].line,
+        style: response.data.data[0].style,
+        elements: response.data.data[0].elements
       })
     }.bind(this))
+    // for(var i= 0; i<i+1;i++)
+    // {
+    //   if(this.state.data!='' && this.state.step==0)
+    //   {
+    //     this.setState({
+    //   loading: 'none'
+    // })
+    //   }
+    // }
+    // this.setState({
+    //   loading: 'none'
+    // })
+
+
   }
 
   onClickResetButton(){
@@ -83,7 +105,8 @@ export default class App1Container extends React.Component {
       data: '',
       style: '',
       elements:'',
-      line : -1
+      line : -1,
+      loading: 'none'
     })
   }
 
@@ -130,7 +153,8 @@ export default class App1Container extends React.Component {
       step: step + 1,
       line: this.state.data[step].line,
       style:this.state.data[step].style,
-      elements: this.state.data[step].elements
+      elements: this.state.data[step].elements,
+      arr : this.this.state.data[step].arr
     })
   }
 
@@ -195,7 +219,9 @@ export default class App1Container extends React.Component {
   {
     code = <div>Wrong Option</div>;
   }
-
+  var arrayCode = [];
+  
+    
     return (
           <div>
           <p style={{'textAlign':'center'}}>Only Dfs and Bfs is Working Right Now </p>
@@ -208,15 +234,22 @@ export default class App1Container extends React.Component {
                               onClickResetButton={this.onClickResetButton}
                               nodes={this.state.nodes}
                               algo={this.state.algo}
-                              matrix={this.state.matrix}/>
+                              matrix={this.state.matrix}
+                              loading={this.state.loading}/>
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <h4>Visual</h4>
+               
+                <span style={{'display':this.state.loading}}>Loading...</span>
+                <br></br>
                 <button className="btn btn-primary" onClick={this.onClickPrevButton}> - Previous </button>
                 <button className="btn btn-primary" onClick={this.onClickNextButton}> Next - </button>
                 <div id="cy-container" >
-                          <div style={cyStyle} id="cy1"></div>
-                    </div>
+                  <div style={cyStyle} id="cy1"></div>
+                </div>
+                <div>
+                  <StackQ arrType={this.state.arrType} arr={this.state.arr}/>
+                </div>                
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <h4>Code Panel</h4>
