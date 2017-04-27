@@ -145,7 +145,7 @@ def solve(request):
 	Algorithm = str(request.POST.get('algo'))
 	if(Algorithm == "bfs"):
 		return BreadthFirstSearch(request,start)
-	elif(Algorithm=="dikjastra"):
+	elif(Algorithm=="dijkstra"):
 		return DijkstraAlgorithm(grid,start)
 	else:
 		dfs(grid,start)
