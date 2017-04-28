@@ -142,7 +142,7 @@ export default class App1Container extends React.Component {
       line: this.state.data[step-2].line,
       style:this.state.data[step-2].style,
       elements: this.state.data[step-2].elements,
-      arr : this.this.state.data[step-2].arr
+      arr : this.state.data[step-2].arr
     })
   }
 
@@ -155,7 +155,7 @@ export default class App1Container extends React.Component {
       line: this.state.data[step].line,
       style:this.state.data[step].style,
       elements: this.state.data[step].elements,
-      arr : this.this.state.data[step].arr
+      arr : this.state.data[step].arr
     })
   }
 
