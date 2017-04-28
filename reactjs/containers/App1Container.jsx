@@ -137,26 +137,42 @@ export default class App1Container extends React.Component {
   onClickPrevButton(){
     var step = this.state.step;
     var line = this.state.line;
-    this.setState({
-      step: step-1,
-      line: this.state.data[step-2].line,
-      style:this.state.data[step-2].style,
-      elements: this.state.data[step-2].elements,
-      arr : this.state.data[step-2].arr
-    })
+    console.log(step,"onprev");
+    if(step && step!=1)
+    {
+	    this.setState({
+	      step: step-1,
+	      line: this.state.data[step-2].line,
+	      style:this.state.data[step-2].style,
+	      elements: this.state.data[step-2].elements,
+	      arr : this.state.data[step-2].arr
+	    })
+	}
+	else
+	{
+		alert("Already at the first step");
+	}
   }
 
 
   onClickNextButton(){
     var step = this.state.step;
     var line = this.state.line;
-    this.setState({
-      step: step + 1,
-      line: this.state.data[step].line,
-      style:this.state.data[step].style,
-      elements: this.state.data[step].elements,
-      arr : this.state.data[step].arr
-    })
+    console.log(step,"onnext")
+    if(step==this.state.data.length-1)
+    {
+    	alert("Already at the last step");
+    }
+    else
+    {
+	    this.setState({
+	      step: step + 1,
+	      line: this.state.data[step].line,
+	      style:this.state.data[step].style,
+	      elements: this.state.data[step].elements,
+	      arr : this.state.data[step].arr
+	    })
+	}
   }
 
 

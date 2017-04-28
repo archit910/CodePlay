@@ -130,22 +130,26 @@ def BreadthFirstSearch(request,Start):
     snapArray = []
     Matrix = parseMatrix(request)
     nodes = len(Matrix[0])
-    visited = [False]*nodes
+    # visited = [False]*nodes
     returnResponse = OrderedDict()    
     snapArray.append(snapshot(nodes,Matrix,0))
     visited.append(Start)
     snapArray.append(snapshot(nodes,Matrix,1))
     Queue.append(Start)
+    snapArray.append(snapshot(nodes,Matrix,2))
+    snapArray.append(snapshot(nodes,Matrix,3))
     while(Queue):
         FrontElement = Queue.pop(0)
+        snapArray.append(snapshot(nodes,Matrix,4))
         for i in range(0,nodes):
+            snapArray.append(snapshot(nodes,Matrix,6,i))
             if(FrontElement!=i and Matrix[FrontElement][i]):
-                snapArray.append(snapshot(nodes,Matrix,6,i))
+                snapArray.append(snapshot(nodes,Matrix,7,i))
                 if(i not in visited):
-                    snapArray.append(snapshot(nodes,Matrix,7,i))
                     visited.append(i)
                     snapArray.append(snapshot(nodes,Matrix,8))
                     Queue.append(i)
+                    snapArray.append(snapshot(nodes,Matrix,9))
     returnResponse['error'] = False
     returnResponse['data'] = snapArray
     # print(len(snapArray))
