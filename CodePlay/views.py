@@ -114,7 +114,10 @@ def snapshot(*arguments):
     tempDict = {}
     tempDict['type'] = "1D"
     tempDict['name'] = "Visited"
-    tempDict['content'] = list(visited)
+    tempvis = []
+    for val in visited:
+        tempvis.append(val+1)
+    tempDict['content'] = list(tempvis)
     returnData['arr'].append(tempDict)
 
     return returnData
