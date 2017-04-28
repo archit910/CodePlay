@@ -102,6 +102,24 @@ def snapshot(nodes,*arguments):
             returnData['style'].append(styleCreator(nodes,createSelector(nodes,"node",arguments[2]+1),currentColour))
     except :
         pass
+    returnData['arr'] = []
+    tempDict = {}
+    tempDict['type'] = "1D"
+    tempDict['name'] = "Visited"
+    tempvis = []
+    for val in visited:
+        tempvis.append(val+1)
+    tempDict['content'] = list(tempvis)
+    returnData['arr'].append(tempDict)
+
+    tempDict1 = {}
+    tempDict1['type'] = "1D"
+    tempDict1['name'] = "Queue"
+    tempvis1 = []
+    for val in Queue:
+        tempvis1.append(val+1)
+    tempDict1['content'] = list(tempvis1)
+    returnData['arr'].append(tempDict1)
 
     return returnData
 
@@ -130,9 +148,9 @@ def BreadthFirstSearch(request,Start):
                     Queue.append(i)
     returnResponse['error'] = False
     returnResponse['data'] = snapArray
-    print(len(snapArray))
-    print(snapArray[0])
-    print("\n\n\n\n")
-    print(snapArray[1])
+    # print(len(snapArray))
+    # print(snapArray[0])
+    # print("\n\n\n\n")
+    # print(snapArray[1])
 
     return JsonResponse(returnResponse)

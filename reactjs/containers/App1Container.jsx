@@ -201,7 +201,8 @@ export default class App1Container extends React.Component {
 		border: '1px dashed'
 	};
 	let cyStyle1 = {
-		height: '500px',
+		minHeight: '100vh',
+		height:"100%"
 	};
 	var code = <div>Hello I am nothing</div>;
 	if(this.state.algo=='dfs')
@@ -241,6 +242,8 @@ export default class App1Container extends React.Component {
                               algo={this.state.algo}
                               matrix={this.state.matrix}
                               loading={this.state.loading}/>
+                <h4>Description of The Algorithm : {this.state.algo} {this.state.nodes} {this.state.description} {this.state.matrix}</h4>
+          
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <h4>Visual</h4>
@@ -262,7 +265,7 @@ export default class App1Container extends React.Component {
                 {code}
               </div>
             </div>
-            <h4>Description of The Algorithm : {this.state.algo} {this.state.nodes} {this.state.description} {this.state.matrix}</h4>
+            
           </div>
     )
   }
