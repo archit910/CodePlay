@@ -18,7 +18,7 @@ export default class App1Container extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps){
-		console.log("next props",nextProps.nodes,nextProps.algo,nextProps.matrix)
+		// console.log("next props",nextProps.nodes,nextProps.algo,nextProps.matrix)
 		this.setState({
 			nodes: nextProps.nodes,
 			algo: nextProps.algo,
@@ -37,7 +37,7 @@ export default class App1Container extends React.Component {
   	}
 
 	handelMatrixFieldChange(i,j,e){
-		console.log(i,j,e.target.value);
+		// console.log(i,j,e.target.value);
 		var tempMatrix = this.state.matrix;
 		// console.log("=======",tempMatrix[i][j]);
 		tempMatrix[i][j] = e.target.value;

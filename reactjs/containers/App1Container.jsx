@@ -55,7 +55,7 @@ export default class App1Container extends React.Component {
     this.setState({
       loading: ''
     })
-    console.log("dsfs");
+    // console.log("dsfs");
     var qs = require('qs');
     axios.post('/solve/',
       qs.stringify({
@@ -189,7 +189,7 @@ export default class App1Container extends React.Component {
         this.renderCytoscapeElement();
     }
     componentDidUpdate(){
-      console.log("asdas")
+      // console.log("asdas")
       this.renderCytoscapeElement();
     }
 
@@ -253,8 +253,7 @@ export default class App1Container extends React.Component {
                   <div style={cyStyle} id="cy1"></div>
                 </div>
                 <div>
-                  <StackQ arrName={this.state.arrName} arr={this.state.arr}/>
-                  {arrayCode}
+                	{arrayCode}
                 </div>                
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>

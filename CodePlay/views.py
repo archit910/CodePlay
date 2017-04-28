@@ -110,6 +110,12 @@ def snapshot(*arguments):
     except :
         pass
     # for i in arguments
+    returnData['arr'] = []
+    tempDict = {}
+    tempDict['type'] = "1D"
+    tempDict['name'] = "Visited"
+    tempDict['content'] = list(visited)
+    returnData['arr'].append(tempDict)
 
     return returnData
 
