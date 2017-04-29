@@ -37,7 +37,7 @@ export default class App1Container extends React.Component {
       elements:'',
       line : -1,
       loading: 'none',
-      arrType: 'Stack : ',
+      arrName: 'Stack : ',
       arr: ''
     }
     this.renderCytoscapeElement = this.renderCytoscapeElement.bind(this);
@@ -55,7 +55,7 @@ export default class App1Container extends React.Component {
     this.setState({
       loading: ''
     })
-    console.log("dsfs");
+    // console.log("dsfs");
     var qs = require('qs');
     axios.post('/solve/',
       qs.stringify({
@@ -137,26 +137,42 @@ export default class App1Container extends React.Component {
   onClickPrevButton(){
     var step = this.state.step;
     var line = this.state.line;
-    this.setState({
-      step: step-1,
-      line: this.state.data[step-2].line,
-      style:this.state.data[step-2].style,
-      elements: this.state.data[step-2].elements,
-      arr : this.this.state.data[step-2].arr
-    })
+    console.log(step,"onprev");
+    if(step && step!=1)
+    {
+	    this.setState({
+	      step: step-1,
+	      line: this.state.data[step-2].line,
+	      style:this.state.data[step-2].style,
+	      elements: this.state.data[step-2].elements,
+	      arr : this.state.data[step-2].arr
+	    })
+	}
+	else
+	{
+		alert("Already at the first step");
+	}
   }
 
 
   onClickNextButton(){
     var step = this.state.step;
     var line = this.state.line;
-    this.setState({
-      step: step + 1,
-      line: this.state.data[step].line,
-      style:this.state.data[step].style,
-      elements: this.state.data[step].elements,
-      arr : this.this.state.data[step].arr
-    })
+    console.log(step,"onnext")
+    if(step==this.state.data.length-1)
+    {
+    	alert("Already at the last step");
+    }
+    else
+    {
+	    this.setState({
+	      step: step + 1,
+	      line: this.state.data[step].line,
+	      style:this.state.data[step].style,
+	      elements: this.state.data[step].elements,
+	      arr : this.state.data[step].arr
+	    })
+	}
   }
 
 
@@ -189,7 +205,7 @@ export default class App1Container extends React.Component {
         this.renderCytoscapeElement();
     }
     componentDidUpdate(){
-      console.log("asdas")
+      // console.log("asdas")
       this.renderCytoscapeElement();
     }
 
@@ -201,7 +217,8 @@ export default class App1Container extends React.Component {
 		border: '1px dashed'
 	};
 	let cyStyle1 = {
-		height: '500px',
+		minHeight: '100vh',
+		height:"100%"
 	};
 	var code = <div>Hello I am nothing</div>;
 	if(this.state.algo=='dfs')
@@ -227,7 +244,7 @@ export default class App1Container extends React.Component {
 	var arrayCode = [];
 	for(let i=0; i<this.state.arr.length;i++)
 	{
-		arrayCode.push(<StackQ arrType={this.state.arr[i].type} arr={this.state.arr.content}/>)
+		arrayCode.push(<StackQ arrName={this.state.arr[i].name} arr={this.state.arr[i].content}/>)
 	}
 
     
@@ -245,6 +262,8 @@ export default class App1Container extends React.Component {
                               algo={this.state.algo}
                               matrix={this.state.matrix}
                               loading={this.state.loading}/>
+                <h4>Description of The Algorithm : {this.state.algo} {this.state.nodes} {this.state.description} {this.state.matrix}</h4>
+          
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <h4>Visual</h4>
@@ -257,8 +276,7 @@ export default class App1Container extends React.Component {
                   <div style={cyStyle} id="cy1"></div>
                 </div>
                 <div>
-                  <StackQ arrType={this.state.arrType} arr={this.state.arr}/>
-                  {arrayCode}
+                	{arrayCode}
                 </div>                
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
@@ -267,7 +285,7 @@ export default class App1Container extends React.Component {
                 {code}
               </div>
             </div>
-            <h4>Description of The Algorithm : {this.state.algo} {this.state.nodes} {this.state.description} {this.state.matrix}</h4>
+            
           </div>
     )
   }

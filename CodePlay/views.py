@@ -105,10 +105,20 @@ def snapshot(*arguments):
             if(i in visited and j in visited):
                 returnData['style'].append(styleCreator(createSelector("edge",i+1,j+1),visitedColour,"edge"))
     try:
-        if(arguments[2]):
+        if(arguments[2]!=-1):
             returnData['style'].append(styleCreator(createSelector("node",arguments[2]+1),currentColour,"node"))
     except :
         pass
+    # for i in arguments
+    returnData['arr'] = []
+    tempDict = {}
+    tempDict['type'] = "1D"
+    tempDict['name'] = "Visited"
+    tempvis = []
+    for val in visited:
+        tempvis.append(val+1)
+    tempDict['content'] = list(tempvis)
+    returnData['arr'].append(tempDict)
 
     return returnData
 
@@ -118,7 +128,7 @@ def dfs(grid,start):
     if(start not in visited):
         # print(start)
         visited.append(start)
-        snapArray.append(snapshot(grid,2))
+        snapArray.append(snapshot(grid,2,-1))
         for i in range(0,nodes):
         	# print(start,i,nodes,"============")
         	if(grid[start][i]):

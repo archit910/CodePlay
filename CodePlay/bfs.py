@@ -102,6 +102,24 @@ def snapshot(nodes,*arguments):
             returnData['style'].append(styleCreator(nodes,createSelector(nodes,"node",arguments[2]+1),currentColour))
     except :
         pass
+    returnData['arr'] = []
+    tempDict = {}
+    tempDict['type'] = "1D"
+    tempDict['name'] = "Visited"
+    tempvis = []
+    for val in visited:
+        tempvis.append(val+1)
+    tempDict['content'] = list(tempvis)
+    returnData['arr'].append(tempDict)
+
+    tempDict1 = {}
+    tempDict1['type'] = "1D"
+    tempDict1['name'] = "Queue"
+    tempvis1 = []
+    for val in Queue:
+        tempvis1.append(val+1)
+    tempDict1['content'] = list(tempvis1)
+    returnData['arr'].append(tempDict1)
 
     return returnData
 
@@ -112,27 +130,31 @@ def BreadthFirstSearch(request,Start):
     snapArray = []
     Matrix = parseMatrix(request)
     nodes = len(Matrix[0])
-    visited = [False]*nodes
+    # visited = [False]*nodes
     returnResponse = OrderedDict()    
     snapArray.append(snapshot(nodes,Matrix,0))
     visited.append(Start)
     snapArray.append(snapshot(nodes,Matrix,1))
     Queue.append(Start)
+    snapArray.append(snapshot(nodes,Matrix,2))
+    snapArray.append(snapshot(nodes,Matrix,3))
     while(Queue):
         FrontElement = Queue.pop(0)
+        snapArray.append(snapshot(nodes,Matrix,4))
         for i in range(0,nodes):
+            snapArray.append(snapshot(nodes,Matrix,6,i))
             if(FrontElement!=i and Matrix[FrontElement][i]):
-                snapArray.append(snapshot(nodes,Matrix,6,i))
+                snapArray.append(snapshot(nodes,Matrix,7,i))
                 if(i not in visited):
-                    snapArray.append(snapshot(nodes,Matrix,7,i))
                     visited.append(i)
                     snapArray.append(snapshot(nodes,Matrix,8))
                     Queue.append(i)
+                    snapArray.append(snapshot(nodes,Matrix,9))
     returnResponse['error'] = False
     returnResponse['data'] = snapArray
-    print(len(snapArray))
-    print(snapArray[0])
-    print("\n\n\n\n")
-    print(snapArray[1])
+    # print(len(snapArray))
+    # print(snapArray[0])
+    # print("\n\n\n\n")
+    # print(snapArray[1])
 
     return JsonResponse(returnResponse)
