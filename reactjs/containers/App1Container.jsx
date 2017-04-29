@@ -10,7 +10,7 @@ import DfsCode from "./DfsCode"
 import BfsCode from "./BfsCode"
 import DijkstraAlgorithm from "./Dijkstra"
 import StackQ from "./StackQ"
-
+import PrimsMstAlgorithm from "./PrimsCode"
 cytoscapeDagre(cytoscape);
 
 export default class App1Container extends React.Component {
@@ -216,6 +216,10 @@ export default class App1Container extends React.Component {
 	{
 		code = <DijkstraAlgorithm line={this.state.line}/>;
 	}
+  else if(this.state.algo=="prims")
+  {
+    code= <PrimsMstAlgorithm line={this.state.line}/>;
+  }
 	else
 	{
 		code = <div>Wrong Option</div>;
