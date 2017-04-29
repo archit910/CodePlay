@@ -154,4 +154,4 @@ def DijkstraAlgorithm(grid,StartPoint):
     #print("\n\n\n\n")
     #print(snapArray[1])
 
-    #return JsonResponse(returnResponse)
+    # return JsonResponse(returnResponse)
