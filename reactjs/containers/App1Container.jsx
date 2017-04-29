@@ -112,8 +112,17 @@ export default class App1Container extends React.Component {
 
   updateAlgo(e){
     this.setState({
-      algo:e,
-      step:0
+      abc: 'true',
+      algo : e,
+      step : 0,
+      description: 'Will be returned from database',
+      start: 'n0',
+      end: 'n0',
+      data: '',
+      style: '',
+      elements:'',
+      line : -1,
+      loading: 'none'
     })
   }
 
@@ -138,7 +147,11 @@ export default class App1Container extends React.Component {
     var step = this.state.step;
     var line = this.state.line;
     console.log(step,"onprev");
-    if(step && step!=1)
+    if(this.state.data=='')
+    {
+    	alert("First Submit");
+    }
+    else if(step && step!=1)
     {
 	    this.setState({
 	      step: step-1,
@@ -159,7 +172,11 @@ export default class App1Container extends React.Component {
     var step = this.state.step;
     var line = this.state.line;
     console.log(step,"onnext")
-    if(step==this.state.data.length-1)
+    if(this.state.data=='')
+    {
+    	alert("First Submit");
+    }
+    else if(step==this.state.data.length-1)
     {
     	alert("Already at the last step");
     }
