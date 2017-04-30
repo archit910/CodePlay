@@ -31,8 +31,8 @@ export default class PrimsMstAlgorithm extends React.Component {
 		content.push("        MstSet[u]=1")
 		content.push("        for j in range(n):")
 		content.push("            if(graph[u][j] and MstSet[j]==0 and graph[u][j]<key[j]):")
-		content.push("            parent[j]=u")
-		content.push("            key[j]=graph[u][j]")
+		content.push("                parent[j]=u")
+		content.push("                key[j]=graph[u][j]")
 		content.push("    for i in range(1,n):")
 		content.push("        print(parent[i],i,graph[i][parent[i]])")
 		this.setState({	
@@ -47,9 +47,9 @@ export default class PrimsMstAlgorithm extends React.Component {
 
 	render(){
 		var codeHtml = []
-		codeHtml.push(<span>visited =  [] </span>)
-		codeHtml.push(<br></br>)
-		codeHtml.push(<br></br>)
+		//codeHtml.push(<span>visited =  [] </span>)
+		//codeHtml.push(<br></br>)
+		//codeHtml.push(<br></br>)
 		for(let i = 0; i <this.state.content.length;i++ )
 		{
 			if(i==this.state.line)
