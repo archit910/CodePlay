@@ -11,6 +11,7 @@ import BfsCode from "./BfsCode"
 import DijkstraAlgorithm from "./Dijkstra"
 import StackQ from "./StackQ"
 import PrimsMstAlgorithm from "./PrimsCode"
+import KruskalMstAlgorithm from "./KruskalCode"
 cytoscapeDagre(cytoscape);
 
 export default class App1Container extends React.Component {
@@ -182,13 +183,17 @@ export default class App1Container extends React.Component {
     }
     else
     {
+      // console.log("Inside else")
 	    this.setState({
 	      step: step + 1,
 	      line: this.state.data[step].line,
 	      style:this.state.data[step].style,
 	      elements: this.state.data[step].elements,
 	      arr : this.state.data[step].arr
-	    })
+	    },()=>{
+        console.log("here",this.state.data.length,this.state.step)
+
+      })
 	}
   }
 
@@ -253,6 +258,10 @@ export default class App1Container extends React.Component {
   else if(this.state.algo=="prims")
   {
     code= <PrimsMstAlgorithm line={this.state.line}/>;
+  }
+  else if(this.state.algo=="kruskal")
+  {
+    code= <KruskalMstAlgorithm line={this.state.line}/>;
   }
 	else
 	{
