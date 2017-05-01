@@ -183,13 +183,17 @@ export default class App1Container extends React.Component {
     }
     else
     {
+      // console.log("Inside else")
 	    this.setState({
 	      step: step + 1,
 	      line: this.state.data[step].line,
 	      style:this.state.data[step].style,
 	      elements: this.state.data[step].elements,
 	      arr : this.state.data[step].arr
-	    })
+	    },()=>{
+        console.log("here",this.state.data.length,this.state.step)
+
+      })
 	}
   }
 

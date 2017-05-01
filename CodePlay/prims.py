@@ -4,6 +4,7 @@ from collections import OrderedDict
 from django.http import HttpResponseRedirect, HttpResponse
 import datetime
 from django.views.decorators.csrf import csrf_exempt
+INFINITY=10**18
 def parseMatrix(request):
 	nodes = int(request.POST.get('nodes'))
 	matrix = []
@@ -89,75 +90,58 @@ def elementCreator(nodes,grid):
 
 
 
-def snapshot(nodes,*arguments):
+def snapshot(nodes,graph,*arguments):
     returnData = OrderedDict()
     returnData['style']=list(snapArrayDefault['style'])
-    returnData['elements'] = elementCreator(nodes,arguments[0])
-    returnData['line'] = arguments[1]
-    for i in visited:
-        returnData['style'].append(styleCreator(nodes,createSelector(nodes,"node",i+1),visitedColour,"node"))
-    for i in range(nodes):
-        for j in range(i+1,nodes):
-            if(i in visited and j in visited):
-                returnData['style'].append(styleCreator(nodes,createSelector(nodes,"edge",i+1,j+1),visitedColour,"edge"))
+    returnData['elements'] = elementCreator(nodes,graph)
+    returnData['line'] = graph
     try:
-        if(arguments[2]):
-            returnData['style'].append(styleCreator(nodes,createSelector(nodes,"node",arguments[2]+1),currentColour,"node"))
-    except :
+        if(arguments[1]):
+            #print("i am here")
+            #print("nodes here is:",nodes)
+            parent=arguments[1]
+            #print("nodes here is:",nodes)
+            for i in range(1,nodes):
+                print(i,parent[i])
+                returnData['style'].append(styleCreator(nodes,createSelector(nodes,"edge",i,parent[i]),visitedColour,"edge"))
+                #returnData['style'].append(styleCreator(nodes,createSelector(nodes,"edge",i,parent[i]),currentColour))
+    except:
         pass
-    returnData['arr'] = []
-    tempDict = {}
-    tempDict['type'] = "1D"
-    tempDict['name'] = "Visited"
-    tempvis = []
-    for val in visited:
-        tempvis.append(val+1)
-    tempDict['content'] = list(tempvis)
-    returnData['arr'].append(tempDict)
-
-    tempDict1 = {}
-    tempDict1['type'] = "1D"
-    tempDict1['name'] = "Queue"
-    tempvis1 = []
-    for val in Queue:
-        tempvis1.append(val+1)
-    tempDict1['content'] = list(tempvis1)
-    returnData['arr'].append(tempDict1)
-
+    returnData['arr']=[]
     return returnData
 
-def BreadthFirstSearch(request,Start):
-    global visited
-    visited = []
+
+def MinKey(key , MstSet , n):
+    MinElement = INFINITY
+    MinElementIndex = -1
+    for i in range(n):
+        if(MstSet[i] == 0 and key[i] < MinElement):
+            MinElement = key[i]
+            MinElementIndex = i
+    return MinElementIndex
+
+
+def PrimsMinimumSpanningTree(graph , nodes):
+    #print(nodes)
     global snapArray
     snapArray = []
-    Matrix = parseMatrix(request)
-    nodes = len(Matrix[0])
-    # visited = [False]*nodes
-    returnResponse = OrderedDict()    
-    snapArray.append(snapshot(nodes,Matrix,0))
-    visited.append(Start)
-    snapArray.append(snapshot(nodes,Matrix,1))
-    Queue.append(Start)
-    snapArray.append(snapshot(nodes,Matrix,2))
-    snapArray.append(snapshot(nodes,Matrix,3))
-    while(Queue):
-        FrontElement = Queue.pop(0)
-        snapArray.append(snapshot(nodes,Matrix,4))
-        for i in range(0,nodes):
-            snapArray.append(snapshot(nodes,Matrix,6,i))
-            if(FrontElement!=i and Matrix[FrontElement][i]):
-                snapArray.append(snapshot(nodes,Matrix,7,i))
-                if(i not in visited):
-                    visited.append(i)
-                    snapArray.append(snapshot(nodes,Matrix,8))
-                    Queue.append(i)
-                    snapArray.append(snapshot(nodes,Matrix,9))
+    returnResponse = OrderedDict() 
+    snapArray.append(snapshot(nodes , graph , 0))
+    parent = [-1] * nodes
+    key = [INFINITY] * (nodes)
+    MstSet = [0] * (nodes)
+    key[0] = 0
+    for i in range(nodes-1):
+        u = MinKey(key , MstSet , nodes)
+        MstSet[u] = 1
+        for j in range(nodes):
+            if(graph[u][j] and MstSet[j] == 0 and graph[u][j] < key[j]):
+                parent[j] = u
+                key[j] = graph[u][j]
+
+    snapArray.append(snapshot(nodes , graph , 0 , parent))
+    #for i in range(1,nodes):
+    #    print(parent[i],i,graph[i][parent[i]])
     returnResponse['error'] = False
     returnResponse['data'] = snapArray
-    # print(len(snapArray))
-    # print(snapArray[0])
-    # print("\n\n\n\n")
-    # print(snapArray[1])
-
     return JsonResponse(returnResponse)

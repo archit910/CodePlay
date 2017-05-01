@@ -8,7 +8,8 @@ import datetime
 from django.views.decorators.csrf import csrf_exempt
 from .bfs import BreadthFirstSearch
 from .dijkstra import DijkstraAlgorithm
-
+from .prims import PrimsMinimumSpanningTree
+from .kruskal import KruskalMinimumSpanningTree
 def parseMatrix(request):
 	nodes = int(request.POST.get('nodes'))
 	matrix = []
@@ -155,8 +156,12 @@ def solve(request):
 	Algorithm = str(request.POST.get('algo'))
 	if(Algorithm == "bfs"):
 		return BreadthFirstSearch(request,start)
-	elif(Algorithm=="dijkstra"):
+	elif(Algorithm == "dijkstra"):
 		return DijkstraAlgorithm(grid,start)
+	elif(Algorithm == "prims"):
+		return PrimsMinimumSpanningTree(grid,nodes)
+	elif(Algorithm == "kruskal"):
+		return KruskalMinimumSpanningTree(grid,nodes)
 	else:
 		dfs(grid,start)
 		returnResponse['error'] = False
@@ -171,7 +176,7 @@ def solve(request):
 	# }
 	# returnResponse['style'] = style
 	# print(returnResponse)
-
+	print("I am coming here also!!")
 	return JsonResponse(returnResponse)
 
 def s(request):
