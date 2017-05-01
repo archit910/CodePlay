@@ -185,4 +185,5 @@ def s(request):
 def b(request):
     returnResponse = {}
     returnResponse['error'] = False
+    returnResponse['abc'] = {'content':[[1,2,3],[1,2]],'type':"2d"}
     return JsonResponse(returnResponse)
