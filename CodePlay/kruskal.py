@@ -103,7 +103,7 @@ def snapshot(nodes , *arguments):
         tempvis.append(rank[i]+1)
     tempDict['content'] = list(tempvis)
     returnData['arr'].append(tempDict)
-    
+
     parent = arguments[3]
     tempDict = {}
     tempDict['type'] = '1D'
@@ -127,9 +127,9 @@ def Union(rank , parent , u , v):
     ParentU = FindParent(parent , u)
     ParentV = FindParent(parent , v)
     if(rank[ ParentU ] > rank[ ParentV ]):
-        parent[ ParentU ] = ParentV
-    elif(rank[ ParentV ] > rank[ ParentU ]):
         parent[ ParentV ] = ParentU
+    elif(rank[ ParentV ] > rank[ ParentU ]):
+        parent[ ParentU ] = ParentV
     else:
         parent[ ParentV ] = ParentU
         rank[ ParentU ] += 1
