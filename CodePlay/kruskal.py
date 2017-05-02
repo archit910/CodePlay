@@ -5,22 +5,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 INFINITY=10**18
-def parseMatrix(request):
-	nodes = int(request.POST.get('nodes'))
-	matrix = []
-	for i in range(nodes):
-		row = []
-		for j in range(nodes):
-			variable = "matrix[" + str(i) + "][" + str(j)+"]"
-			row.append(int(request.POST.get(variable)))
-		matrix.append(row)
-	# print(matrix)
-	return matrix
-
-visited = []
-#nodes = 10
-Queue=[]
-#Colours
 visitedColour = "#FF0000"
 defaultColour = "#11479e"
 currentColour = "#bbbbbb"
@@ -49,8 +33,7 @@ snapArrayDefault['style'] = [
             }
         ]
 
-def styleCreator(nodes,selector, color,type):
-    print("in style creator function for type!!",type,color)
+def styleCreator(selector, color,type):
     returnStyle = OrderedDict()
     returnStyle['selector'] = selector
     returnStyle['style'] = OrderedDict()
@@ -61,7 +44,7 @@ def styleCreator(nodes,selector, color,type):
     # print returnStyle
     return returnStyle
 
-def createSelector(nodes,type,*elements):
+def createSelector(type,*elements):
     if(type=="node"):
         return "#n"+str(elements[0])
     else:
@@ -74,13 +57,12 @@ def getNodes(nodes):
     return nodesArray
 
 def getEdge(nodes,grid):
-	edgeArray = []
-	for i in range(nodes):
-		for j in range(i+1,nodes):
-			#print(i,j,nodes)
-			if(grid[i][j]):
-				edgeArray.append({'data':{'id':"e"+str(i+1)+str(j+1),'source':'n'+str(i+1),'target':'n'+str(j+1)}})
-	return edgeArray
+    edgeArray = []
+    for i in range(nodes):
+        for j in range(i+1,nodes):
+            if(grid[i][j]):
+                edgeArray.append({'data':{'id':"e"+str(i+1)+str(j+1),'source':'n'+str(i+1),'target':'n'+str(j+1)}})
+    return edgeArray
 
 def elementCreator(nodes,grid):
     elements = OrderedDict()
@@ -89,38 +71,50 @@ def elementCreator(nodes,grid):
     return elements
 
 
-def snapshot(nodes,graph,*arguments):
+
+
+def snapshot(nodes , *arguments):
     returnData = OrderedDict()
-    returnData['style']=list(snapArrayDefault['style'])
-    returnData['elements'] = elementCreator(nodes,graph)
-    returnData['line'] = arguments[0]
-    #print("pro pro pro")
-    #print(len(arguments))
+    returnData['style'] = list(snapArrayDefault['style'])
+    returnData['elements'] = elementCreator(nodes,arguments[0])
+    returnData['line'] = arguments[1]
+    
     try:
-        if(arguments[1]):
-            temp=[]
-            ResultantMst=arguments[1]
-            print(ResultantMst)
-            for i in range(len(ResultantMst)):
-                #print(ResultantMst[i][0],ResultantMst[i][1])
-                temp.append(ResultantMst[i][0])
-                temp.append(ResultantMst[i][1])
-                returnData['style'].append(styleCreator(nodes,createSelector(nodes,"edge",ResultantMst[i][0]+1,ResultantMst[i][1]+1),visitedColour,"edge"))
-            print(temp)
-            for i in temp:
-                returnData['style'].append(styleCreator(nodes,createSelector(nodes,"node",i+1),currentColour,"node"))
+        if(len(arguments[4])>1):
+            for i in arguments[4]:
+                returnData['style'].append(styleCreator(createSelector("node",i + 1),visitedColour,"node"))
     except:
         pass
-    returnData['arr'] = []
-    return returnData
 
-def ChangeGraph(graph , nodes):
-    grid=[]
+    try:
+        if(arguments[5]):
+            ResultantMst=arguments[5]
+            for i in range(len(ResultantMst)):
+                returnData['style'].append(styleCreator(createSelector("edge" , ResultantMst[i][0] + 1 , ResultantMst[i][1] + 1) , visitedColour , "edge"))
+    except:
+        pass
+    rank = arguments[2]
+    returnData['arr'] = []
+    tempDict = {}
+    tempDict['type'] = "1D"
+    tempDict['name'] = "Rank"
+    tempvis = []
     for i in range(nodes):
-        for j in range(nodes):
-            if( graph[i][j]):
-                grid.append( [i , j , graph[i][j] ])
-    return grid
+        tempvis.append(rank[i]+1)
+    tempDict['content'] = list(tempvis)
+    returnData['arr'].append(tempDict)
+    
+    parent = arguments[3]
+    tempDict = {}
+    tempDict['type'] = '1D'
+    tempDict['name'] = 'Parent'
+    tempvis = []
+    for i in range(nodes):
+        tempvis.append(parent[i]+1)
+    tempDict['content'] = list(tempvis)
+    returnData['arr'].append(tempDict)    
+
+    return returnData
 
 
 def FindParent(parent , key):
@@ -128,53 +122,65 @@ def FindParent(parent , key):
         return key
     return FindParent(parent , parent[ key ])
 
-
-def FindUnion(rank , parent , u , v):
-    ParentU=FindParent(parent , u)
-    ParentV=FindParent(parent , v)
-    if(rank[ParentU] > rank[ParentV]):
-        parent[ParentU] = ParentV
-    elif(rank[ParentV] > rank[ParentU]):
-        parent[ParentV] = ParentU
+ 
+def Union(rank , parent , u , v):
+    ParentU = FindParent(parent , u)
+    ParentV = FindParent(parent , v)
+    if(rank[ ParentU ] > rank[ ParentV ]):
+        parent[ ParentU ] = ParentV
+    elif(rank[ ParentV ] > rank[ ParentU ]):
+        parent[ ParentV ] = ParentU
     else:
-        parent[ParentV] = ParentU
-        rank[ParentU] += 1
+        parent[ ParentV ] = ParentU
+        rank[ ParentU ] += 1
+
+
+def ChangeGraph(grid , nodes):
+    graph=[]
+    for i in range( nodes ):
+        for j in range( i ):
+            if( grid[i][j] ):
+                graph.append([j , i , grid[i][j] ])
+    return graph
 
 
 def KruskalMinimumSpanningTree(grid , nodes):
-    #print(graph[1],graph[2],graph[3])
+    rank = [0]*( nodes )
+    parent = [0]*( nodes )
     global snapArray
     snapArray = []
-    returnResponse = OrderedDict() 
-    snapArray.append(snapshot(nodes , grid , 0))
+    snapArray.append( snapshot ( nodes , grid , 0 , rank , parent) )
+    returnResponse = OrderedDict()
     graph = ChangeGraph(grid , nodes)
-    graph = sorted(graph , key = lambda item : item[2])
-    rank = [0] * (nodes+1)
-    parent = [0] * (nodes+1)
+    #print("nodes:",nodes)
+    #print("change graph is:",graph)
+    graph = sorted( graph , key = lambda item: item[2])
+    
     ResultantMst = []
-    start = 0
-    for i in range(nodes+1):
+    for i in range( nodes ):
         parent[i] = i
-    #print(rank)
-    #print(parent)
-    i=0
+    i = 0
+    start = 0
+    
     while(start < nodes-1):
-        #print("here for ",i,graph[i])
-        u , v , weight = graph[i]
+        u,v,weight = graph[i]
         i = i + 1
-        #print("i is:",i)
-        ParentU = FindParent(parent , u)
-        ParentV = FindParent(parent , v)
-        #print("i is:",i)
+        ParentU = FindParent(parent,u)
+        ParentV = FindParent(parent,v)
+        
         if(ParentU != ParentV):
-            start = start+1
-            ResultantMst.append( [ u , v , weight ] )
-            FindUnion(rank , parent , ParentU , ParentV)
-    #print(ResultantMst) 
-    snapArray.append(snapshot(nodes , grid , 0 , ResultantMst))
-    returnResponse['error'] = False
-    returnResponse['data'] = snapArray
-    print("I am in kruskal return response!!")
-    print(len(returnResponse))
-    print("end of return response")
-    return JsonResponse(returnResponse)
+            start = start + 1
+            ResultantMst.append( [u , v , weight ] )
+            Union(rank , parent , ParentU , ParentV)
+        TempNodeArray = set()
+        
+        for fro , to , wie in ResultantMst:
+            TempNodeArray.add( fro )
+            TempNodeArray.add( to )
+
+        snapArray.append( snapshot( nodes , grid , 0 ,rank , parent , TempNodeArray , ResultantMst))
+    #print(ResultantMst)
+    snapArray.append( snapshot( nodes , grid , 0 , rank , parent, TempNodeArray , ResultantMst))
+    returnResponse[ 'error' ] = False
+    returnResponse[ 'data' ] = snapArray
+    return JsonResponse( returnResponse )

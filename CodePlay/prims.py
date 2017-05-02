@@ -94,7 +94,7 @@ def snapshot(nodes,graph,*arguments):
     returnData = OrderedDict()
     returnData['style']=list(snapArrayDefault['style'])
     returnData['elements'] = elementCreator(nodes,graph)
-    returnData['line'] = graph
+    returnData['line'] = arguments[0]
     try:
         if(arguments[1]):
             #print("i am here")
