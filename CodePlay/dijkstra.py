@@ -53,15 +53,18 @@ snapArrayDefault['style'] = [
             }
         ]
 
-def styleCreator(nodes,selector, color):
+def styleCreator(selector, color, type):
     returnStyle = OrderedDict()
     returnStyle['selector'] = selector
     returnStyle['style'] = OrderedDict()
-    returnStyle['style']['background-color'] = color
+    if (type=="node"):
+        returnStyle['style']['background-color'] = color
+    else:
+        returnStyle['style']['line-color'] = color
     # print returnStyle
     return returnStyle
 
-def createSelector(nodes,type,*elements):
+def createSelector(type,*elements):
     if(type=="node"):
         return "#n"+str(elements[0])
     else:
@@ -91,23 +94,41 @@ def elementCreator(nodes,grid):
 
 
 
-def snapshot(nodes,*arguments):
+def snapshot(nodes,grid,line,currentNode,currentNodeChild,pq,dist):
     returnData = OrderedDict()
     returnData['style']=list(snapArrayDefault['style'])
-    returnData['elements'] = elementCreator(nodes,arguments[0])
-    returnData['line'] = arguments[1]
-    for i in visited:
-        returnData['style'].append(styleCreator(nodes,createSelector(nodes,"node",i+1),visitedColour))
-    for i in range(nodes):
-        for j in range(i+1,nodes):
-            if(i in visited and j in visited):
-                returnData['style'].append(styleCreator(nodes,createSelector(nodes,"edge",i+1,j+1),visitedColour))
-    try:
-        if(arguments[2]):
-            returnData['style'].append(styleCreator(nodes,createSelector(nodes,"node",arguments[2]+1),currentColour))
-    except :
-        pass
-
+    returnData['elements'] = elementCreator(nodes,grid)
+    returnData['line'] = line
+    returnData['arr'] = []
+    # for i in visited:
+    #     returnData['style'].append(styleCreator(nodes,createSelector(nodes,"node",i+1),visitedColour))
+    # for i in range(nodes):
+    #     for j in range(i+1,nodes):
+    #         if(i in visited and j in visited):
+    #             returnData['style'].append(styleCreator(nodes,createSelector(nodes,"edge",i+1,j+1),visitedColour))
+    if(currentNode!=-1):
+        returnData['style'].append(styleCreator(createSelector("node",currentNode+1),currentColour,"node"))
+        if(currentNodeChild!=-1):
+            returnData['style'].append(styleCreator(createSelector("node",currentNodeChild+1),visitedColour,"node"))
+            returnData['style'].append(styleCreator(createSelector("edge",currentNode+1,currentNodeChild+1),visitedColour,"edge"))
+    if(pq!=-1):
+        tempDict = {}
+        tempDict['type'] = "1D"
+        tempDict['name'] = "Priority Queue ( point, distance ) "
+        tempvis = []
+        for val in pq:
+            tempvis.append(str(val[0]+1) + ", " +str(val[1]))
+        tempDict['content'] = list(tempvis)
+        returnData['arr'].append(tempDict)
+    if(dist!=-1):
+        tempDict = {}
+        tempDict['type'] = "1D"
+        tempDict['name'] = "Distance from starting point to other point"
+        tempvis = []
+        for val in dist:
+            tempvis.append(val)
+        tempDict['content'] = list(tempvis)
+        returnData['arr'].append(tempDict)
     return returnData
 
 def MakeListFromMatrix(grid,n):
@@ -123,35 +144,46 @@ def MakeListFromMatrix(grid,n):
 def DijkstraAlgorithm(grid,StartPoint):
     global visited
     visited = []
-    #global snapArray
-    #snapArray = []
+    global snapArray
+    snapArray = []
     #Matrix = parseMatrix(request)
     nodes = len(grid[0])
     #visited = [False]*nodes
-    #returnResponse = OrderedDict()    
+    returnResponse = OrderedDict()    
     #snapArray.append(snapshot(nodes,Matrix,0))
     #visited.append(Start)
-    #snapArray.append(snapshot(nodes,Matrix,1))
-
+    snapArray.append(snapshot(nodes,grid,-1,-1,-1,-1,-1))
+    snapArray.append(snapshot(nodes,grid, 2,-1,-1,-1,-1))
     graph=MakeListFromMatrix(grid,nodes)
     PriorityQueue=[(StartPoint,0)]
+    snapArray.append(snapshot(nodes,grid, 3,StartPoint,-1,PriorityQueue,-1))
     distance=[INFINITY]*(nodes)
+    snapArray.append(snapshot(nodes,grid, 4,-1,-1,PriorityQueue,distance))
     distance[StartPoint]=0
+    snapArray.append(snapshot(nodes,grid, 5,StartPoint,-1,PriorityQueue,distance))
+    snapArray.append(snapshot(nodes,grid, 6,-1,-1,PriorityQueue,distance))
     while(PriorityQueue):
         TopElement,Cost=heappop(PriorityQueue)
+        snapArray.append(snapshot(nodes,grid, 7, TopElement,-1,PriorityQueue,distance))
         #print(TopElement,Cost)
+        snapArray.append(snapshot(nodes,grid, 8, TopElement,-1,PriorityQueue,distance))
         if(Cost>distance[TopElement]):
+            snapArray.append(snapshot(nodes,grid, 9, TopElement,-1,PriorityQueue,distance))
             pass
+        snapArray.append(snapshot(nodes,grid, 10, TopElement,-1,PriorityQueue,distance))
         for to,weight in graph[TopElement]:
+            snapArray.append(snapshot(nodes,grid, 11, TopElement,to,PriorityQueue,distance))
             if((distance[TopElement]+weight)<=distance[to]):
                 distance[to]=(distance[TopElement]+weight)
+                snapArray.append(snapshot(nodes,grid, 11, TopElement,to,PriorityQueue,distance))
                 heappush(PriorityQueue,(to,distance[to]))
+                snapArray.append(snapshot(nodes,grid, 11, to,-1,PriorityQueue,distance))
     # print(*distance)
-    #returnResponse['error'] = False
-    #returnResponse['data'] = snapArray
+    returnResponse['error'] = False
+    returnResponse['data'] = snapArray
     #print(len(snapArray))
     #print(snapArray[0])
     #print("\n\n\n\n")
     #print(snapArray[1])
 
-    # return JsonResponse(returnResponse)
+    return JsonResponse(returnResponse)
