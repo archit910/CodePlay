@@ -26,7 +26,6 @@ defaultColour = "#11479e"
 currentColour = "#bbbbbb"
 
 snapArray=[]
-
 snapArrayDefault = OrderedDict()
 snapArrayDefault['style'] = [
             {'selector': 'node',
@@ -49,7 +48,7 @@ snapArrayDefault['style'] = [
             }
         ]
 
-def styleCreator(nodes,selector, color,type):
+def styleCreator(selector, color,type):
     returnStyle = OrderedDict()
     returnStyle['selector'] = selector
     returnStyle['style'] = OrderedDict()
@@ -60,7 +59,7 @@ def styleCreator(nodes,selector, color,type):
     # print returnStyle
     return returnStyle
 
-def createSelector(nodes,type,*elements):
+def createSelector(type,*elements):
     if(type=="node"):
         return "#n"+str(elements[0])
     else:
@@ -73,13 +72,12 @@ def getNodes(nodes):
     return nodesArray
 
 def getEdge(nodes,grid):
-	edgeArray = []
-	for i in range(nodes):
-		for j in range(i+1,nodes):
-			#print(i,j,nodes)
-			if(grid[i][j]):
-				edgeArray.append({'data':{'id':"e"+str(i+1)+str(j+1),'source':'n'+str(i+1),'target':'n'+str(j+1)}})
-	return edgeArray
+    edgeArray = []
+    for i in range(nodes):
+        for j in range(i+1,nodes):
+            if(grid[i][j]):
+                edgeArray.append({'data':{'id':"e"+str(i+1)+str(j+1),'source':'n'+str(i+1),'target':'n'+str(j+1)}})
+    return edgeArray
 
 def elementCreator(nodes,grid):
     elements = OrderedDict()
@@ -88,26 +86,40 @@ def elementCreator(nodes,grid):
     return elements
 
 
-
-
-def snapshot(nodes,graph,*arguments):
+def snapshot(nodes , *arguments):
     returnData = OrderedDict()
-    returnData['style']=list(snapArrayDefault['style'])
-    returnData['elements'] = elementCreator(nodes,graph)
-    returnData['line'] = arguments[0]
-    try:
-        if(arguments[1]):
-            #print("i am here")
-            #print("nodes here is:",nodes)
-            parent=arguments[1]
-            #print("nodes here is:",nodes)
-            for i in range(1,nodes):
-                print(i,parent[i])
-                returnData['style'].append(styleCreator(nodes,createSelector(nodes,"edge",i,parent[i]),visitedColour,"edge"))
-                #returnData['style'].append(styleCreator(nodes,createSelector(nodes,"edge",i,parent[i]),currentColour))
-    except:
-        pass
+    returnData['style'] = list(snapArrayDefault['style'])
+    returnData['elements'] = elementCreator(nodes,arguments[0])
+    returnData['line'] = arguments[1]
+    #print("printing snapshot is:")
+    parent=arguments[2]
+    graph=arguments[0]
+    TempNodeArray=set()
+    for i in range(nodes):
+        if(parent[i]!=-1):
+            TempNodeArray.add(i)
+            TempNodeArray.add(parent[i])
+    #print("TempNodeArray is:",TempNodeArray)
+    for i in TempNodeArray:
+        returnData['style'].append(styleCreator(createSelector("node",i + 1),visitedColour,"node"))
+    for i in range(nodes):
+        if(parent[i]!=-1):
+            #print(parent[i],i,graph[i][parent[i]])
+            returnData['style'].append(styleCreator(createSelector("edge" , parent[i] + 1 , i + 1) , visitedColour , "edge"))
+    #print("snapshot ended here!!")
     returnData['arr']=[]
+
+
+    tempDict = {}
+    tempDict['type'] = "1D"
+    tempDict['name'] = "Parent"
+    tempvis = []
+    for i in range(nodes):
+        tempvis.append(parent[i]+1)
+    tempDict['content'] = list(tempvis)
+    returnData['arr'].append(tempDict)
+
+
     return returnData
 
 
@@ -126,11 +138,11 @@ def PrimsMinimumSpanningTree(graph , nodes):
     global snapArray
     snapArray = []
     returnResponse = OrderedDict() 
-    snapArray.append(snapshot(nodes , graph , 0))
     parent = [-1] * nodes
     key = [INFINITY] * (nodes)
     MstSet = [0] * (nodes)
     key[0] = 0
+    snapArray.append(snapshot(nodes , graph , 0 , parent))
     for i in range(nodes-1):
         u = MinKey(key , MstSet , nodes)
         MstSet[u] = 1
@@ -138,8 +150,10 @@ def PrimsMinimumSpanningTree(graph , nodes):
             if(graph[u][j] and MstSet[j] == 0 and graph[u][j] < key[j]):
                 parent[j] = u
                 key[j] = graph[u][j]
+                snapArray.append(snapshot(nodes , graph , 0 , parent))
 
     snapArray.append(snapshot(nodes , graph , 0 , parent))
+    #print("final answer is:")
     #for i in range(1,nodes):
     #    print(parent[i],i,graph[i][parent[i]])
     returnResponse['error'] = False
