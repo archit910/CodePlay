@@ -140,6 +140,12 @@ def MakeListFromMatrix(grid,n):
                 graph[j].append((i,grid[i][j]))
     return graph
 
+def validGrid(grid):
+    for i in grid:
+        for j in i:
+            if(j<0):
+                return False
+    return True
 
 def DijkstraAlgorithm(grid,StartPoint):
     global visited
@@ -148,6 +154,8 @@ def DijkstraAlgorithm(grid,StartPoint):
     snapArray = []
     #Matrix = parseMatrix(request)
     nodes = len(grid[0])
+    if(not validGrid(grid)):
+        return JsonResponse({'error':True,'errorDescription':'Graph contains negative weighted edge'})
     #visited = [False]*nodes
     returnResponse = OrderedDict()    
     #snapArray.append(snapshot(nodes,Matrix,0))

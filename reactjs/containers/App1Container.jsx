@@ -15,41 +15,41 @@ import KruskalMstAlgorithm from "./KruskalCode"
 cytoscapeDagre(cytoscape);
 
 export default class App1Container extends React.Component {
-  constructor(props){
-    super(props);
-    var y = {
-                'content': 'data(id)',
-                'text-opacity': 0.9,
-                'text-valign': 'center',
-                'text-halign': 'right',
-                'background-color': '#11479e'
-              };
-    this.state = {
-      abc: 'true',
-      matrix: [[0]],
-      nodes : 1,
-      algo : 'bfs',
-      step : 0,
-      description: 'Will be returned from database',
-      start: 'n0',
-      end: 'n0',
-      data: '',
-      style: '',
-      elements:'',
-      line : -1,
-      loading: 'none',
-      arrName: 'Stack : ',
-      arr: ''
-    }
-    this.renderCytoscapeElement = this.renderCytoscapeElement.bind(this);
-    this.onClickPrevButton = this.onClickPrevButton.bind(this);
-    this.onClickNextButton = this.onClickNextButton.bind(this);
-    this.updateAlgo = this.updateAlgo.bind(this);
-    this.updateNumberOfNodes = this.updateNumberOfNodes.bind(this);
-    this.updateMatrix = this.updateMatrix.bind(this);
-    this.onClickSubmitButton = this.onClickSubmitButton.bind(this);
-    this.onClickResetButton = this.onClickResetButton.bind(this);
-  }
+	constructor(props){
+		super(props);
+		var y = {
+					'content': 'data(id)',
+					'text-opacity': 0.9,
+					'text-valign': 'center',
+					'text-halign': 'right',
+					'background-color': '#11479e'
+				};
+		this.state = {
+			abc: 'true',
+			matrix: [[0]],
+			nodes : 1,
+			algo : 'bfs',
+			step : 0,
+			description: 'Will be returned from database',
+			start: 'n0',
+			end: 'n0',
+			data: '',
+			style: '',
+			elements:'',
+			line : -1,
+			loading: 'none',
+			arrName: 'Stack : ',
+			arr: ''
+		}
+		this.renderCytoscapeElement = this.renderCytoscapeElement.bind(this);
+		this.onClickPrevButton = this.onClickPrevButton.bind(this);
+		this.onClickNextButton = this.onClickNextButton.bind(this);
+		this.updateAlgo = this.updateAlgo.bind(this);
+		this.updateNumberOfNodes = this.updateNumberOfNodes.bind(this);
+		this.updateMatrix = this.updateMatrix.bind(this);
+		this.onClickSubmitButton = this.onClickSubmitButton.bind(this);
+		this.onClickResetButton = this.onClickResetButton.bind(this);
+	}
 
 
   onClickSubmitButton(){
@@ -68,14 +68,24 @@ export default class App1Container extends React.Component {
       })
     )
     .then(function (response){
-      this.setState({
-        data: response.data.data,
-        step: 0,
-        loading: 'none',
-        line: response.data.data[0].line,
-        style: response.data.data[0].style,
-        elements: response.data.data[0].elements
-      })
+    	if(response.data.error)
+      	{
+      		alert(response.data.errorDescription);
+      		this.setState({
+				loading: 'none'
+			})
+      	}
+      	else
+      	{
+			this.setState({
+				data: response.data.data,
+				step: 0,
+				loading: 'none',
+				line: response.data.data[0].line,
+				style: response.data.data[0].style,
+				elements: response.data.data[0].elements
+			})
+	  	}
     }.bind(this))
     // for(var i= 0; i<i+1;i++)
     // {
@@ -93,39 +103,39 @@ export default class App1Container extends React.Component {
 
   }
 
-  onClickResetButton(){
-    this.setState({
-      abc: 'true',
-      matrix: [[0]],
-      nodes : 1,
-      algo : 'bfs',
-      step : 0,
-      description: 'Will be returned from database',
-      start: 'n0',
-      end: 'n0',
-      data: '',
-      style: '',
-      elements:'',
-      line : -1,
-      loading: 'none'
-    })
-  }
+	onClickResetButton(){
+		this.setState({
+			abc: 'true',
+			matrix: [[0]],
+			nodes : 1,
+			algo : 'bfs',
+			step : 0,
+			description: 'Will be returned from database',
+			start: 'n0',
+			end: 'n0',
+			data: '',
+			style: '',
+			elements:'',
+			line : -1,
+			loading: 'none'
+		})
+	}
 
-  updateAlgo(e){
-    this.setState({
-      abc: 'true',
-      algo : e,
-      step : 0,
-      description: 'Will be returned from database',
-      start: 'n0',
-      end: 'n0',
-      data: '',
-      style: '',
-      elements:'',
-      line : -1,
-      loading: 'none'
-    })
-  }
+	updateAlgo(e){
+		this.setState({
+			abc: 'true',
+			algo : e,
+			step : 0,
+			description: 'Will be returned from database',
+			start: 'n0',
+			end: 'n0',
+			data: '',
+			style: '',
+			elements:'',
+			line : -1,
+			loading: 'none'
+		})
+	}
 
   updateNumberOfNodes(e){
     var node = ("n").concat(String(e));
