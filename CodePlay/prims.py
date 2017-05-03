@@ -123,13 +123,19 @@ def snapshot(nodes , *arguments):
     return returnData
 
 
-def MinKey(key , MstSet , n):
+def MinKey(nodes,graph,parent,key , MstSet , n):
+    snapArray.append(snapshot(nodes , graph , 1 , parent))
     MinElement = INFINITY
     MinElementIndex = -1
     for i in range(n):
+        snapArray.append(snapshot(nodes , graph , 4 , parent))
+        snapArray.append(snapshot(nodes , graph , 5 , parent))
         if(MstSet[i] == 0 and key[i] < MinElement):
             MinElement = key[i]
+            snapArray.append(snapshot(nodes , graph , 6 , parent))
             MinElementIndex = i
+            snapArray.append(snapshot(nodes , graph , 7 , parent))
+    snapArray.append(snapshot(nodes , graph , 8 , parent))
     return MinElementIndex
 
 
@@ -142,17 +148,27 @@ def PrimsMinimumSpanningTree(graph , nodes):
     key = [INFINITY] * (nodes)
     MstSet = [0] * (nodes)
     key[0] = 0
-    snapArray.append(snapshot(nodes , graph , 0 , parent))
+    snapArray.append(snapshot(nodes , graph , 9 , parent))
     for i in range(nodes-1):
-        u = MinKey(key , MstSet , nodes)
+        snapArray.append(snapshot(nodes , graph , 14 , parent))
+        snapArray.append(snapshot(nodes , graph , 15 , parent))
+        u = MinKey(nodes,graph,parent,key , MstSet , nodes)
+        #snapArray.append(snapshot(nodes , graph , 15 , parent))
         MstSet[u] = 1
+        snapArray.append(snapshot(nodes , graph , 16 , parent))
         for j in range(nodes):
+            snapArray.append(snapshot(nodes , graph , 17 , parent))
+            snapArray.append(snapshot(nodes , graph , 18 , parent))
+            if(i == nodes - 2 and j == nodes - 1):
+                #for k in range(nodes):
+                snapArray.append(snapshot(nodes , graph , 21 , parent))
+                snapArray.append(snapshot(nodes , graph , 22 , parent))
             if(graph[u][j] and MstSet[j] == 0 and graph[u][j] < key[j]):
                 parent[j] = u
+                snapArray.append(snapshot(nodes , graph , 19 , parent))
                 key[j] = graph[u][j]
-                snapArray.append(snapshot(nodes , graph , 0 , parent))
-
-    snapArray.append(snapshot(nodes , graph , 0 , parent))
+                snapArray.append(snapshot(nodes , graph , 20 , parent))
+    snapArray.append(snapshot(nodes , graph , 22 , parent))
     #print("final answer is:")
     #for i in range(1,nodes):
     #    print(parent[i],i,graph[i][parent[i]])
