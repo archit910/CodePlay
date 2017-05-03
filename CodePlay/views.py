@@ -10,6 +10,9 @@ from .bfs import BreadthFirstSearch
 from .dijkstra import DijkstraAlgorithm
 from .prims import PrimsMinimumSpanningTree
 from .kruskal import KruskalMinimumSpanningTree
+from . bellman import bellmanFord
+
+
 def parseMatrix(request):
 	nodes = int(request.POST.get('nodes'))
 	matrix = []
@@ -151,9 +154,9 @@ def solve(request):
 	grid = parseMatrix(request)
 	global nodes
 	nodes = int(request.POST.get('nodes'))
-	print(nodes,"=========")
 	start = int(request.POST.get('start'))
 	Algorithm = str(request.POST.get('algo'))
+	print(nodes,Algorithm,start,"=========")
 	if(Algorithm == "bfs"):
 		return BreadthFirstSearch(request,start)
 	elif(Algorithm == "dijkstra"):
@@ -162,6 +165,8 @@ def solve(request):
 		return PrimsMinimumSpanningTree(grid,nodes)
 	elif(Algorithm == "kruskal"):
 		return KruskalMinimumSpanningTree(grid,nodes)
+	elif(Algorithm == "bellman"):
+		return bellmanFord(grid,start)
 	else:
 		dfs(grid,start)
 		returnResponse['error'] = False

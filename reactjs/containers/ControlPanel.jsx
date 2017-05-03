@@ -129,7 +129,7 @@ export default class App1Container extends React.Component {
 					        <option value='bfs'>Breadth-First-Search</option>
 					        <option value='dfs'>Depth-First-Search</option>
 					        <option value='dijkstra'>Dijkstra</option>
-					        <option value='belman'>BelmennFord</option>
+					        <option value='bellman'>BelmennFord</option>
 					        <option value='prims'>Prims-Mst</option>
 					        <option value='kruskal'>Kruskal-Mst</option>
 				      	</select>

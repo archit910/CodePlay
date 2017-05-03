@@ -12,6 +12,7 @@ import DijkstraAlgorithm from "./Dijkstra"
 import StackQ from "./StackQ"
 import PrimsMstAlgorithm from "./PrimsCode"
 import KruskalMstAlgorithm from "./KruskalCode"
+import Bellman from "./Bellman"
 cytoscapeDagre(cytoscape);
 
 export default class App1Container extends React.Component {
@@ -52,56 +53,56 @@ export default class App1Container extends React.Component {
 	}
 
 
-  onClickSubmitButton(){
-    this.setState({
-      loading: ''
-    })
-    // console.log("dsfs");
-    var qs = require('qs');
-    axios.post('/solve/',
-      qs.stringify({
-        matrix : this.state.matrix,
-        algo : this.state.algo,
-        nodes : this.state.nodes,
-        start: 0,
-        
-      })
-    )
-    .then(function (response){
-    	if(response.data.error)
-      	{
-      		alert(response.data.errorDescription);
-      		this.setState({
-				loading: 'none'
+	onClickSubmitButton(){
+		this.setState({
+			loading: ''
+		})
+		// console.log("dsfs");
+		var qs = require('qs');
+		axios.post('/solve/',
+			qs.stringify({
+			matrix : this.state.matrix,
+			algo : this.state.algo,
+			nodes : this.state.nodes,
+			start: 0,
+
 			})
-      	}
-      	else
-      	{
-			this.setState({
-				data: response.data.data,
-				step: 0,
-				loading: 'none',
-				line: response.data.data[0].line,
-				style: response.data.data[0].style,
-				elements: response.data.data[0].elements
-			})
-	  	}
-    }.bind(this))
-    // for(var i= 0; i<i+1;i++)
-    // {
-    //   if(this.state.data!='' && this.state.step==0)
-    //   {
-    //     this.setState({
-    //   loading: 'none'
-    // })
-    //   }
-    // }
-    // this.setState({
-    //   loading: 'none'
-    // })
+		)
+		.then(function (response){
+			if(response.data.error)
+				{
+					alert(response.data.errorDescription);
+					this.setState({
+					loading: 'none'
+				})
+				}
+				else
+				{
+				this.setState({
+					data: response.data.data,
+					step: 0,
+					loading: 'none',
+					line: response.data.data[0].line,
+					style: response.data.data[0].style,
+					elements: response.data.data[0].elements
+				})
+				}
+		}.bind(this))
+		// for(var i= 0; i<i+1;i++)
+		// {
+		//   if(this.state.data!='' && this.state.step==0)
+		//   {
+		//     this.setState({
+		//   loading: 'none'
+		// })
+		//   }
+		// }
+		// this.setState({
+		//   loading: 'none'
+		// })
 
 
-  }
+	}
 
 	onClickResetButton(){
 		this.setState({
@@ -137,109 +138,108 @@ export default class App1Container extends React.Component {
 		})
 	}
 
-  updateNumberOfNodes(e){
-    var node = ("n").concat(String(e));
-    // console.log(node,"===============")
-    this.setState({
-      nodes:e,
-      step : 0,
-      end : node
-    })
-  }
-
-  updateMatrix(e){
-    this.setState({
-      matrix: e,
-      step : 0
-    })
-  }
-
-  onClickPrevButton(){
-    var step = this.state.step;
-    var line = this.state.line;
-    console.log(step,"onprev");
-    if(this.state.data=='')
-    {
-    	alert("First Submit");
-    }
-    else if(step && step!=1)
-    {
-	    this.setState({
-	      step: step-1,
-	      line: this.state.data[step-2].line,
-	      style:this.state.data[step-2].style,
-	      elements: this.state.data[step-2].elements,
-	      arr : this.state.data[step-2].arr
-	    })
+	updateNumberOfNodes(e){
+		var node = ("n").concat(String(e));
+		// console.log(node,"===============")
+		this.setState({
+			nodes:e,
+			step : 0,
+			end : node
+		})
 	}
-	else
-	{
-		alert("Already at the first step");
+
+	updateMatrix(e){
+		this.setState({
+			matrix: e,
+			step : 0
+		})
 	}
-  }
 
-
-  onClickNextButton(){
-    var step = this.state.step;
-    var line = this.state.line;
-    console.log(step,"onnext")
-    if(this.state.data=='')
-    {
-    	alert("First Submit");
-    }
-    else if(step==this.state.data.length-1)
-    {
-    	alert("Already at the last step");
-    }
-    else
-    {
-      // console.log("Inside else")
-	    this.setState({
-	      step: step + 1,
-	      line: this.state.data[step].line,
-	      style:this.state.data[step].style,
-	      elements: this.state.data[step].elements,
-	      arr : this.state.data[step].arr
-	    },()=>{
-        console.log("here",this.state.data.length,this.state.step)
-
-      })
+	onClickPrevButton(){
+		var step = this.state.step;
+		var line = this.state.line;
+		console.log(step,"onprev");
+		if(this.state.data=='')
+		{
+			alert("First Submit");
+		}
+		else if(step && step!=1)
+		{
+			this.setState({
+				step: step-1,
+				line: this.state.data[step-2].line,
+				style:this.state.data[step-2].style,
+				elements: this.state.data[step-2].elements,
+				arr : this.state.data[step-2].arr
+			})
+		}
+		else
+		{
+			alert("Already at the first step");
+		}
 	}
-  }
 
 
-  renderCytoscapeElement(){
+	onClickNextButton(){
+		var step = this.state.step;
+		var line = this.state.line;
+		console.log(step,"onnext")
+		if(this.state.data=='')
+		{
+			alert("First Submit");
+		}
+		else if(step==this.state.data.length-1)
+		{
+			alert("Already at the last step");
+		}
+		else
+		{
+			// console.log("Inside else")
+			this.setState({
+				step: step + 1,
+				line: this.state.data[step].line,
+				style:this.state.data[step].style,
+				elements: this.state.data[step].elements,
+				arr : this.state.data[step].arr
+			},()=>{
+				console.log("here",this.state.data.length,this.state.step)
+			})
+		}
+	}
 
-        console.log('* Cytoscape.js is rendering the graph..');
 
-        
+	renderCytoscapeElement(){
 
-        this.cy = cytoscape(
-        {
-            container: document.getElementById('cy1'),
+	    console.log('* Cytoscape.js is rendering the graph..');
 
-            boxSelectionEnabled: false,
-            autounselectify: true,
+	    
 
-            'style': this.state.style
-                ,
-            'elements': this.state.elements,
+	    this.cy = cytoscape(
+	    {
+	        container: document.getElementById('cy1'),
 
-            layout: {
-                name: 'dagre',
-                directed: true,
-                padding: 10
-            }
-            }); 
-    }
+	        boxSelectionEnabled: false,
+	        autounselectify: true,
 
-    componentDidMount(){
-        this.renderCytoscapeElement();
-    }
-    componentDidUpdate(){
-      // console.log("asdas")
-      this.renderCytoscapeElement();
-    }
+	        'style': this.state.style
+	            ,
+	        'elements': this.state.elements,
+
+	        layout: {
+	            name: 'dagre',
+	            directed: true,
+	            padding: 10
+	        }
+	        }); 
+	}
+
+	componentDidMount(){
+	    this.renderCytoscapeElement();
+	}
+	componentDidUpdate(){
+	  // console.log("asdas")
+	  this.renderCytoscapeElement();
+	}
 
   render() {
 	let cyStyle = {
@@ -265,14 +265,18 @@ export default class App1Container extends React.Component {
 	{
 		code = <DijkstraAlgorithm line={this.state.line}/>;
 	}
-  else if(this.state.algo=="prims")
-  {
-    code= <PrimsMstAlgorithm line={this.state.line}/>;
-  }
-  else if(this.state.algo=="kruskal")
-  {
-    code= <KruskalMstAlgorithm line={this.state.line}/>;
-  }
+	else if(this.state.algo=="prims")
+	{
+		code= <PrimsMstAlgorithm line={this.state.line}/>;
+	}
+	else if(this.state.algo=="kruskal")
+	{
+		code= <KruskalMstAlgorithm line={this.state.line}/>;
+	}
+	else if(this.state.algo=="bellman")
+	{
+		code= <Bellman line={this.state.line}/>;
+	}
 	else
 	{
 		code = <div>Wrong Option</div>;
