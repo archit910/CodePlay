@@ -73,7 +73,7 @@ def elementCreator(nodes,grid):
 
 
 
-def snapshot(nodes , *arguments):
+def snapshot(currentNode1,currentNode2,nodes , *arguments):
     returnData = OrderedDict()
     returnData['style'] = list(snapArrayDefault['style'])
     returnData['elements'] = elementCreator(nodes,arguments[0])
@@ -93,6 +93,11 @@ def snapshot(nodes , *arguments):
                 returnData['style'].append(styleCreator(createSelector("edge" , ResultantMst[i][0] + 1 , ResultantMst[i][1] + 1) , visitedColour , "edge"))
     except:
         pass
+    if(currentNode1!=-1):
+        returnData['style'].append(styleCreator(createSelector("node",currentNode1 + 1),currentColour,"node"))
+    if(currentNode2!=-1):
+        returnData['style'].append(styleCreator(createSelector("node",currentNode2 + 1),currentColour,"node"))
+
     rank = arguments[2]
     returnData['arr'] = []
     tempDict = {}
@@ -118,34 +123,34 @@ def snapshot(nodes , *arguments):
 
 
 def FindParent(nodes,grid,rank,parent , key ,TempNodeArray,ResultantMst):
-    snapArray.append( snapshot ( nodes , grid , 0 , rank , parent,TempNodeArray,ResultantMst) )
-    snapArray.append( snapshot ( nodes , grid , 1 , rank , parent,TempNodeArray,ResultantMst) )
+    snapArray.append( snapshot (key, -1, nodes , grid , 0 , rank , parent,TempNodeArray,ResultantMst) )
+    snapArray.append( snapshot (key, parent[key], nodes , grid , 1 , rank , parent,TempNodeArray,ResultantMst) )
     if(parent[key] == key):
-        snapArray.append( snapshot ( nodes , grid , 2 , rank , parent,TempNodeArray,ResultantMst) )
+        snapArray.append( snapshot (key, parent[key], nodes , grid , 2 , rank , parent,TempNodeArray,ResultantMst) )
         return key
     else:
-        snapArray.append( snapshot ( nodes , grid , 3 , rank , parent,TempNodeArray,ResultantMst ) )
+        snapArray.append( snapshot (parent[key], -1, nodes , grid , 3 , rank , parent,TempNodeArray,ResultantMst ) )
         return FindParent(nodes , grid , rank , parent , parent[ key ],TempNodeArray,ResultantMst)
 
  
 def Union(nodes,grid,rank , parent , u , v,TempNodeArray,ResultantMst):
-    snapArray.append( snapshot ( nodes , grid , 5 , rank , parent,TempNodeArray,ResultantMst) )
-    snapArray.append( snapshot ( nodes , grid , 6 , rank , parent,TempNodeArray,ResultantMst) )
+    snapArray.append( snapshot ( -1, -1, nodes , grid , 5 , rank , parent,TempNodeArray,ResultantMst) )
+    snapArray.append( snapshot ( u,-1,nodes , grid , 6 , rank , parent,TempNodeArray,ResultantMst) )
     ParentU = FindParent(nodes,grid,rank,parent , u,TempNodeArray,ResultantMst)
-    snapArray.append( snapshot ( nodes , grid , 7 , rank , parent,TempNodeArray,ResultantMst) )
+    snapArray.append( snapshot ( v,-1,nodes , grid , 7 , rank , parent,TempNodeArray,ResultantMst) )
     ParentV = FindParent(nodes,grid,rank,parent , v,TempNodeArray,ResultantMst)
-    snapArray.append( snapshot ( nodes , grid , 8 , rank , parent,TempNodeArray,ResultantMst) )
+    snapArray.append( snapshot ( u,v,nodes , grid , 8 , rank , parent,TempNodeArray,ResultantMst) )
     if(rank[ ParentU ] > rank[ ParentV ]):
-        snapArray.append( snapshot ( nodes , grid , 9 , rank , parent,TempNodeArray,ResultantMst) )
         parent[ ParentV ] = ParentU
+        snapArray.append( snapshot ( ParentV,ParentU,nodes , grid , 9 , rank , parent,TempNodeArray,ResultantMst) )
     elif(rank[ ParentV ] > rank[ ParentU ]):
-        snapArray.append( snapshot ( nodes , grid , 11 , rank , parent,TempNodeArray,ResultantMst) )
         parent[ ParentU ] = ParentV
+        snapArray.append( snapshot ( ParentU,ParentV,nodes , grid , 11 , rank , parent,TempNodeArray,ResultantMst) )
     else:
         parent[ ParentV ] = ParentU
-        snapArray.append( snapshot ( nodes , grid , 13 , rank , parent,TempNodeArray,ResultantMst) )
+        snapArray.append( snapshot ( ParentV,ParentU,nodes , grid , 13 , rank , parent,TempNodeArray,ResultantMst) )
         rank[ ParentU ] += 1
-        snapArray.append( snapshot ( nodes , grid , 14 , rank , parent,TempNodeArray,ResultantMst) )
+        snapArray.append( snapshot ( ParentU,-1 ,nodes , grid , 14 , rank , parent,TempNodeArray,ResultantMst) )
 
 
 def ChangeGraph(grid , nodes):
@@ -162,45 +167,45 @@ def KruskalMinimumSpanningTree(grid , nodes):
     parent = [0]*( nodes )
     global snapArray
     snapArray = []
-    snapArray.append( snapshot ( nodes , grid , 16 , rank , parent) )
+    snapArray.append( snapshot ( -1,-1,nodes , grid , 16 , rank , parent) )
 
     returnResponse = OrderedDict()
     graph = ChangeGraph(grid , nodes)
     #print("nodes:",nodes)
     #print("change graph is:",graph)
     graph = sorted( graph , key = lambda item: item[2])
-    snapArray.append( snapshot ( nodes , grid , 17 , rank , parent) )
+    snapArray.append( snapshot ( -1,-1,nodes , grid , 17 , rank , parent) )
     ResultantMst = []
     for i in range( nodes ):
         parent[i] = i
     i = 0
     start = 0
-    snapArray.append( snapshot ( nodes , grid , 25 , rank , parent) )
+    snapArray.append( snapshot ( -1,-1,nodes , grid , 25 , rank , parent) )
     TempNodeArray = set()
     while(start < nodes-1):
         u,v,weight = graph[i]
-        snapArray.append( snapshot ( nodes , grid , 26 , rank , parent,TempNodeArray,ResultantMst) )
+        snapArray.append( snapshot ( u,v,nodes , grid , 26 , rank , parent,TempNodeArray,ResultantMst) )
         i = i + 1
         #TempNodeArray = set()
-        snapArray.append( snapshot ( nodes , grid , 27 , rank , parent,TempNodeArray,ResultantMst) )
-        snapArray.append( snapshot ( nodes , grid , 28 , rank , parent,TempNodeArray,ResultantMst) )
+        snapArray.append( snapshot ( u,v,nodes , grid , 27 , rank , parent,TempNodeArray,ResultantMst) )
+        snapArray.append( snapshot ( u,-1,nodes , grid , 28 , rank , parent,TempNodeArray,ResultantMst) )
         ParentU = FindParent(nodes,grid,rank,parent,u,TempNodeArray,ResultantMst)
-        snapArray.append( snapshot ( nodes , grid , 29 , rank , parent,TempNodeArray,ResultantMst) )
+        snapArray.append( snapshot ( v,-1,nodes , grid , 29 , rank , parent,TempNodeArray,ResultantMst) )
         ParentV = FindParent(nodes,grid,rank,parent,v,TempNodeArray,ResultantMst)
-        snapArray.append( snapshot ( nodes , grid , 30 , rank , parent,TempNodeArray,ResultantMst) )
+        snapArray.append( snapshot ( ParentU,ParentV,nodes , grid , 30 , rank , parent,TempNodeArray,ResultantMst) )
         if(ParentU != ParentV):
             start = start + 1
-            snapArray.append( snapshot ( nodes , grid , 31 , rank , parent,TempNodeArray,ResultantMst) )
+            snapArray.append( snapshot ( ParentU,ParentV,nodes , grid , 31 , rank , parent,TempNodeArray,ResultantMst) )
             ResultantMst.append( [u , v , weight ] )
             for fro , to , wie in ResultantMst:
                 TempNodeArray.add( fro )
                 TempNodeArray.add( to )
-            snapArray.append( snapshot ( nodes , grid , 32 , rank , parent,TempNodeArray,ResultantMst) )
-            snapArray.append( snapshot ( nodes , grid , 33 , rank , parent,TempNodeArray,ResultantMst) )
+            snapArray.append( snapshot ( u,v,nodes , grid , 32 , rank , parent,TempNodeArray,ResultantMst) )
+            snapArray.append( snapshot ( ParentU,ParentV,nodes , grid , 33 , rank , parent,TempNodeArray,ResultantMst) )
             Union(nodes , grid , rank , parent , ParentU , ParentV,TempNodeArray,ResultantMst)
-            snapArray.append( snapshot( nodes , grid , 25 ,rank , parent , TempNodeArray , ResultantMst))
-        snapArray.append( snapshot( nodes , grid , 25 ,rank , parent , TempNodeArray , ResultantMst))
-    snapArray.append( snapshot( nodes , grid , 34 , rank , parent, TempNodeArray , ResultantMst))
+            snapArray.append( snapshot( -1,-1,nodes , grid , 25 ,rank , parent , TempNodeArray , ResultantMst))
+        snapArray.append( snapshot( -1,-1,nodes , grid , 25 ,rank , parent , TempNodeArray , ResultantMst))
+    snapArray.append( snapshot( -1,-1,nodes , grid , 34 , rank , parent, TempNodeArray , ResultantMst))
     print(ResultantMst)
     
     returnResponse[ 'error' ] = False
