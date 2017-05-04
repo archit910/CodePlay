@@ -10,7 +10,9 @@ export default class App1Container extends React.Component {
 			algo : this.props.algo,
 			matrix : this.props.matrix,
 			loading : this.props.loading,
-			algoInfo : ''
+			algoInfo : '',
+			links : '',
+
 		}
 		this.onNumberOfNodesChange = this.onNumberOfNodesChange.bind(this);
 		this.onAlgoChange = this.onAlgoChange.bind(this);
@@ -22,8 +24,16 @@ export default class App1Container extends React.Component {
 		axios.get(url)
 		.then(function(response){
 			console.log(response.data)
+			var links = []
+			console.log(response.data.links)
+			for(let i=0 ; i< response.data.links.length ; i++)
+			{
+				links.push(<a href={response.data.links[i]}>{response.data.links[i]}</a>)
+				links.push(<br></br>)
+			}
 			this.setState({
-				algoInfo : response.data
+				algoInfo : response.data,
+				links: links
 			})
 		}.bind(this))
 	}
@@ -35,6 +45,24 @@ export default class App1Container extends React.Component {
 			algo: nextProps.algo,
 			matrix: nextProps.matrix,
 			loading : this.props.loading
+		},()=>{
+			var url = "/getalgodescription/?algo=".concat(this.state.algo)
+			// console.log(url)
+			axios.get(url)
+			.then(function(response){
+				console.log(response.data)
+				var links = []
+				console.log(response.data.links)
+				for(let i=0 ; i< response.data.links.length ; i++)
+				{
+					links.push(<a href={response.data.links[i]}>{response.data.links[i]}</a>)
+					links.push(<br></br>)
+				}
+				this.setState({
+					algoInfo : response.data,
+					links: links
+				})
+			}.bind(this))
 		})
 	}
 
@@ -87,8 +115,16 @@ export default class App1Container extends React.Component {
 		axios.get(url)
 		.then(function(response){
 			console.log(response.data)
+			var links = []
+			console.log(response.data.links)
+			for(let i=0 ; i< response.data.links.length ; i++)
+			{
+				links.push(<a href={response.data.links[i]}>{response.data.links[i]}</a>)
+				links.push(<br></br>)
+			}
 			this.setState({
-				algoInfo : response.data
+				algoInfo : response.data,
+				links: links
 			})
 		}.bind(this))
 		this.props.updateAlgo(e.target.value);
@@ -137,7 +173,7 @@ export default class App1Container extends React.Component {
 		// for (var i = inputMatrixHtml.length - 1; i >= 0; i--) {
 		// 	console.log(inputMatrixHtml[i])
 		// }
-
+		
 
 		return (
 			<div>
@@ -171,7 +207,12 @@ export default class App1Container extends React.Component {
 	                </tbody>
                 </table>
 
-                <h4>Description of The Algorithm : {this.state.algoInfo.name} {this.state.nodes} {this.state.description} {this.state.matrix}</h4>
+                <h4>Name of The Algorithm : {this.state.algoInfo.name} </h4>
+                <h4>description of The Algorithm : {this.state.algoInfo.descript} </h4>
+                <h4>Space complexity : {this.state.algoInfo.spaceComplexity} </h4>
+                <h4>Time complexity : {this.state.algoInfo.timeComlexity} </h4>
+                <h4>Suggested Links : </h4>
+                {this.state.links}
 			</div>
 		);
 	}
