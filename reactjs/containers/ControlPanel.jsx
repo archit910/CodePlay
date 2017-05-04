@@ -131,6 +131,13 @@ export default class App1Container extends React.Component {
 	}
 
 	render() {
+		let css = {
+			color:'black'
+		}
+		let cssWhite = {
+			color : 'white'
+		}
+
 		var nodesHtml = [];
 		for (var i = 1; i <= 8; i++) {
 			nodesHtml.push( <option value={i}>{i}</option>);
@@ -149,7 +156,7 @@ export default class App1Container extends React.Component {
 					}
 					else
 					{
-						temporaryRow.push(<td>n{j}</td>);
+						temporaryRow.push(<td style={cssWhite}>n{j}</td>);
 					}
 				}
 			}
@@ -159,7 +166,7 @@ export default class App1Container extends React.Component {
 					// console.log("j = ",j);
 					if(j==0)
 					{
-						temporaryRow.push(<td>n{i}</td>);
+						temporaryRow.push(<td style={cssWhite}>n{i}</td>);
 					}
 					else
 					{
@@ -173,7 +180,7 @@ export default class App1Container extends React.Component {
 		// for (var i = inputMatrixHtml.length - 1; i >= 0; i--) {
 		// 	console.log(inputMatrixHtml[i])
 		// }
-		
+
 
 		return (
 			<div>
@@ -181,7 +188,7 @@ export default class App1Container extends React.Component {
 					
 					<form>
 						Select The Algo : 
-						<select name="algo" onChange={this.onAlgoChange}>
+						<select name="algo" onChange={this.onAlgoChange} style={css}>
 					        <option value='bfs'>Breadth-First-Search</option>
 					        <option value='dfs'>Depth-First-Search</option>
 					        <option value='dijkstra'>Dijkstra</option>
@@ -191,7 +198,7 @@ export default class App1Container extends React.Component {
 				      	</select>
 				      	<br/>
 				      	Select The Nodes : 
-						<select name="nodes" onChange={this.onNumberOfNodesChange}>
+						<select name="nodes" onChange={this.onNumberOfNodesChange} style={css}>
 					        {nodesHtml}
 
 				      	</select>
@@ -200,7 +207,7 @@ export default class App1Container extends React.Component {
 					<button className="btn btn-primary" onClick={this.onClickSubmitButton}>Submit</button>
 				    <button className="btn btn-warning" onClick={this.onClickResetButton}>Reset</button>
 				    
-				<table>
+				<table style={css}>
 					<tbody>
 	                	{inputMatrixHtml}
 	                	

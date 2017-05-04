@@ -250,7 +250,9 @@ export default class App1Container extends React.Component {
 	};
 	let cyStyle1 = {
 		minHeight: '100vh',
-		height:"100%"
+		height:"100%",
+		color: 'white',
+		backgroundColor: '#373737'
 	};
 	var code = <div>Hello I am nothing</div>;
 	if(this.state.algo=='dfs')
