@@ -249,7 +249,7 @@ export default class App1Container extends React.Component {
 		border: '1px dashed'
 	};
 	let cyStyle1 = {
-		minHeight: '100vh',
+		minHeight: '120vh',
 		height:"100%",
 		color: 'white',
 		backgroundColor: '#373737'
