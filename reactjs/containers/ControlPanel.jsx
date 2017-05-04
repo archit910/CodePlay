@@ -207,10 +207,10 @@ export default class App1Container extends React.Component {
 	                </tbody>
                 </table>
 
-                <h4>Name of The Algorithm : {this.state.algoInfo.name} </h4>
-                <h4>description of The Algorithm : {this.state.algoInfo.descript} </h4>
-                <h4>Space complexity : {this.state.algoInfo.spaceComplexity} </h4>
-                <h4>Time complexity : {this.state.algoInfo.timeComlexity} </h4>
+                <h4>Name of The Algorithm : </h4> <p>{this.state.algoInfo.name} </p>
+                <h4>Description of The Algorithm : </h4> <p>{this.state.algoInfo.descript}</p>
+                <h4>Space complexity : </h4> <p>{this.state.algoInfo.spaceComplexity} </p>
+                <h4>Time complexity : </h4> <p>{this.state.algoInfo.timeComlexity} </p>
                 <h4>Suggested Links : </h4>
                 {this.state.links}
 			</div>
