@@ -1,5 +1,6 @@
 import React from "react";
 import Input from "./Input"
+import axios from 'axios';
 
 export default class App1Container extends React.Component {
 	constructor(props){
@@ -8,13 +9,23 @@ export default class App1Container extends React.Component {
 			nodes : this.props.nodes,
 			algo : this.props.algo,
 			matrix : this.props.matrix,
-			loading : this.props.loading
+			loading : this.props.loading,
+			algoInfo : ''
 		}
 		this.onNumberOfNodesChange = this.onNumberOfNodesChange.bind(this);
 		this.onAlgoChange = this.onAlgoChange.bind(this);
 		this.handelMatrixFieldChange = this.handelMatrixFieldChange.bind(this);
 		this.onClickSubmitButton = this.onClickSubmitButton.bind(this);
 		this.onClickResetButton = this.onClickResetButton.bind(this);
+		var url = "/getalgodescription/?algo=".concat(this.state.algo)
+		// console.log(url)
+		axios.get(url)
+		.then(function(response){
+			console.log(response.data)
+			this.setState({
+				algoInfo : response.data
+			})
+		}.bind(this))
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -71,6 +82,15 @@ export default class App1Container extends React.Component {
 		this.setState({
 			algo : e.target.value
 		})
+		var url = "/getalgodescription/?algo=".concat(e.target.value)
+		// console.log(url)
+		axios.get(url)
+		.then(function(response){
+			console.log(response.data)
+			this.setState({
+				algoInfo : response.data
+			})
+		}.bind(this))
 		this.props.updateAlgo(e.target.value);
 	}
 
@@ -150,6 +170,8 @@ export default class App1Container extends React.Component {
 	                	
 	                </tbody>
                 </table>
+
+                <h4>Description of The Algorithm : {this.state.algoInfo.name} {this.state.nodes} {this.state.description} {this.state.matrix}</h4>
 			</div>
 		);
 	}

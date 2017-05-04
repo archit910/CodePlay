@@ -302,7 +302,6 @@ export default class App1Container extends React.Component {
                               algo={this.state.algo}
                               matrix={this.state.matrix}
                               loading={this.state.loading}/>
-                <h4>Description of The Algorithm : {this.state.algo} {this.state.nodes} {this.state.description} {this.state.matrix}</h4>
           
               </div>
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>

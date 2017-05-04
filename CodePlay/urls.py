@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.views import generic
 from .views import *
+from description.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -25,5 +26,6 @@ urlpatterns = [
     url(r'^solve/',solve),
     url(r'^s/',s),
     url(r'^b/',b),
+    url(r'getalgodescription/$',getAlgoDescription),
 
 ]
