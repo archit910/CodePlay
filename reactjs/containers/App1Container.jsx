@@ -290,7 +290,7 @@ export default class App1Container extends React.Component {
     
     return (
           <div>
-          <p style={{'textAlign':'center'}}>Only Dfs and Bfs is Working Right Now </p>
+          
             <div className="row">
               <div className="col-sm-4 col-md-4 border" style={cyStyle1}>
                 <ControlPanel updateAlgo={this.updateAlgo} 
